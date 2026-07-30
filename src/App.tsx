@@ -165,7 +165,7 @@ export default function App() {
           role: 'SOC Analyst — Tier 1',
           department: 'SOC',
           manager: 'emp-021',
-        },
+        } as any,
       });
     }
   }, []);
