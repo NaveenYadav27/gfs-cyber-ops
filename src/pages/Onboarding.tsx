@@ -174,7 +174,7 @@ function TeamStep() {
         <p className="text-sm text-[var(--color-gfs-text-secondary)] mt-1">Cybersecurity Division — SOC</p>
       </div>
       <div className="space-y-2">
-        {TEAM_MEMBERS.map((member, i) => (
+        {TEAM_MEMBERS.map((member: any, i: number) => (
           <Card key={member.id} delay={i * 0.05} className="!p-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--color-gfs-accent)] to-[var(--color-gfs-blue)] flex items-center justify-center flex-shrink-0">
@@ -335,7 +335,7 @@ export function Onboarding() {
         </div>
         {/* Step indicators */}
         <div className="flex items-center gap-1 mt-3">
-          {ONBOARDING_STEPS.slice(0, totalSteps).map((s, i) => {
+          {ONBOARDING_STEPS.slice(0, totalSteps).map((s: any, i: number) => {
             const Icon = stepIcons[i];
             return (
               <button

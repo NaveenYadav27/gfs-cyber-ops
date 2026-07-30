@@ -9,6 +9,7 @@ import { EnterpriseSearch } from '@/components/ui/EnterpriseSearch';
 import { NotificationCenter } from '@/components/ui/NotificationCenter';
 import { useStore } from '@/store/useStore';
 import { useLearningEngine } from '@/store/useLearningEngine';
+import { WebinarMode } from '@/components/webinar/WebinarMode';
 
 export function GlobalHeader() {
   const { user, logout, theme, setTheme } = useStore();
@@ -47,6 +48,11 @@ export function GlobalHeader() {
           <span className="text-[10px] text-[var(--color-gfs-accent)]">Mission Active</span>
         </div>
       )}
+
+      {/* Webinar Demo Button */}
+      <div className="hidden xl:block">
+        <WebinarMode />
+      </div>
 
       {/* Search */}
       <div className="flex-1 max-w-md mx-auto">

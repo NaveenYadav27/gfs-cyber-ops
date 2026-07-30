@@ -1,0 +1,272 @@
+import type { OffensiveTool } from '@/types/offensive';
+
+export const OFFENSIVE_TOOLS: OffensiveTool[] = [
+  {
+    id: 'tool-nmap', name: 'Nmap', category: 'Reconnaissance', icon: '🔍',
+    description: 'Network exploration and port scanning utility. The most widely-used network discovery and auditing tool.',
+    version: '7.95', purpose: 'Discover hosts, ports, services, and OS on a network.',
+    offensivePurpose: 'Map attack surface. Identify open ports and running services that can be exploited.',
+    defensiveDetection: 'Nmap scans generate connection attempts across multiple ports. Detect via: firewall logs (port sweep), IDS rules (scan patterns), endpoint logs (SYN floods).',
+    installation: 'sudo apt install nmap',
+    features: ['Port scanning (TCP/UDP)', 'OS detection', 'Service/version detection', 'Script scanning (NSE)', 'Timing controls', 'Output formats (XML, normal, grepable)'],
+    mitreMapping: ['T1046 Network Service Discovery', 'T1595 Active Scanning'],
+    owaspMapping: ['OWASP Testing Guide — Information Gathering'],
+    relatedTools: ['Masscan', 'Unicornscan', 'RustScan'],
+    commands: [
+      { command: 'nmap -sV -sC 10.10.10.101', description: 'Service and default script scan on WEB-01', parameters: [
+        { flag: '-sV', description: 'Probe open ports to determine service/version info', required: false },
+        { flag: '-sC', description: 'Run default NSE scripts', required: false },
+      ], example: 'nmap -sV -sC 10.10.10.101', output: `Starting Nmap 7.95 ( https://nmap.org ) at 2025-01-15 10:30 IST\nNmap scan report for WEB-01 (10.10.10.101)\nHost is up (0.0023s latency).\n\nPORT     STATE SERVICE VERSION\n22/tcp   open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.6\n80/tcp   open  http    nginx 1.24.0\n|_http-title: GFS Internet Banking\n|_http-server-header: nginx/1.24.0\n443/tcp  open  ssl/http nginx 1.24.0\n| ssl-cert: Subject: CN=ibanking.gfs.com\n3306/tcp open  mysql   MySQL 8.0.36\n| mysql-info: Protocol: 10, Version: 8.0.36\n\nService detection performed.\n4 services scanned.\n\nNmap done: 1 IP address (1 host up) scanned in 12.45 seconds`, warning: 'Port 3306 (MySQL) is exposed to the network — this is a critical finding.', mitreTechnique: 'T1046 — Network Service Discovery', detectionOpportunity: 'Multiple sequential port connections from single source within short timeframe triggers firewall alert.' },
+      { command: 'nmap -p- -T4 10.10.10.101', description: 'Full port scan with aggressive timing', parameters: [
+        { flag: '-p-', description: 'Scan all 65535 ports', required: false },
+        { flag: '-T4', description: 'Aggressive timing template (faster)', required: false },
+      ], example: 'nmap -p- -T4 10.10.10.101', output: `Starting Nmap 7.95\nScanning all 65535 ports for WEB-01 (10.10.10.101)\nDiscovered open port 22/tcp\nDiscovered open port 80/tcp\nDiscovered open port 443/tcp\nDiscovered open port 3306/tcp\nDiscovered open port 8080/tcp\n\nNmap done: 1 IP address scanned in 45.23 seconds\n5 open ports found`, warning: 'Full port scan is noisy and will likely be detected by IDS/IPS.', mitreTechnique: 'T1046 — Network Service Discovery' },
+      { command: 'nmap -sU --top-ports 100 10.10.10.101', description: 'UDP scan — top 100 ports', parameters: [
+        { flag: '-sU', description: 'UDP scan', required: false },
+        { flag: '--top-ports 100', description: 'Scan only the 100 most common UDP ports', required: false },
+      ], example: 'nmap -sU --top-ports 100 10.10.10.101', output: `PORT      STATE         SERVICE\n53/udp    open          dns\n161/udp   open          snmp\n500/udp   open|filtered isakmp\n\nNmap done: 1 IP address scanned in 89.12 seconds` },
+      { command: 'nmap --script vuln 10.10.10.101', description: 'Vulnerability scan using NSE scripts', parameters: [
+        { flag: '--script vuln', description: 'Run all vulnerability detection scripts', required: false },
+      ], example: 'nmap --script vuln 10.10.10.101', output: `PORT     STATE SERVICE\n80/tcp   open  http\n| http-sql-injection:\n|   Possible SQL injection:\n|     URI: /login.php\n|     Parameter: username\n|     Payload: ' OR '1'='1\n443/tcp  open  ssl/http\n| ssl-poodle:\n|   VULNERABLE: SSLv3 POODLE\n3306/tcp open  mysql\n| mysql-empty-password:\n|   Root account has empty password` },
+    ],
+    labs: [
+      { id: 'lab-nmap-01', title: 'Discover GFS WEB-01', difficulty: 'beginner', objective: 'Use Nmap to discover all open ports and services on the GFS Internet Banking server.', targetHost: 'WEB-01', hints: ['Start with a simple scan', 'Use -sV for version detection'], steps: [
+        { order: 1, title: 'Understand the Objective', instruction: 'You have been asked to perform reconnaissance on GFS WEB-01 (10.10.10.101) as part of an authorized penetration test. Your goal is to discover all open ports and identify running services.', command: undefined, expectedOutput: 'No output — this is a planning step.', explanation: 'Reconnaissance is the first phase of any penetration test. Understanding the objective before running commands prevents noise and ensures thorough coverage.' },
+        { order: 2, title: 'Run Initial Discovery Scan', instruction: 'Run a basic Nmap scan to discover open ports.', command: 'nmap 10.10.10.101', expectedOutput: 'PORT     STATE SERVICE\n22/tcp   open  ssh\n80/tcp   open  http\n443/tcp  open  https\n3306/tcp open  mysql', explanation: 'This quick scan identified 4 open ports. SSH, HTTP, HTTPS, and MySQL are running. The MySQL port being open to the network is immediately suspicious.', blueTeamView: { siemAlert: 'Sentinel: Nmap scan detected from 10.10.99.10 — 4 port connections in 2 seconds', detectionRule: 'Suricata: ET SCAN Nmap SYN Scan Detected', investigation: 'Check source IP 10.10.99.10 — this is the authorized Red Team attacker box. Expected activity.' } },
+        { order: 3, title: 'Identify Services and Versions', instruction: 'Run a service detection scan to identify software versions.', command: 'nmap -sV 10.10.10.101', expectedOutput: '22/tcp   open  ssh     OpenSSH 8.9p1\n80/tcp   open  http    nginx 1.24.0\n443/tcp  open  ssl/http nginx 1.24.0\n3306/tcp open  mysql   MySQL 8.0.36', explanation: 'Service detection reveals specific versions. nginx 1.24.0 and MySQL 8.0.36. Check these versions against known CVEs.', blueTeamView: { siemAlert: 'Sentinel: Service enumeration detected — repeated connections with service probes' } },
+        { order: 4, title: 'Risk Analysis', instruction: 'Analyze the findings for security risks.', command: undefined, expectedOutput: 'FINDING: MySQL port 3306 is exposed to the network\nSEVERITY: CRITICAL\nIMPACT: Potential unauthorized database access\nMITRE: T1190 — Exploit Public-Facing Application', explanation: 'MySQL should never be directly accessible from outside the application tier. This is a significant misconfiguration that could allow direct database attacks.' },
+      ]},
+    ],
+    cheatSheet: [
+      { category: 'Basic Scanning', commands: [
+        { syntax: 'nmap <target>', description: 'Default scan — top 1000 ports' },
+        { syntax: 'nmap -sV <target>', description: 'Service version detection' },
+        { syntax: 'nmap -sC <target>', description: 'Default NSE scripts' },
+        { syntax: 'nmap -O <target>', description: 'OS detection' },
+      ]},
+      { category: 'Port Specification', commands: [
+        { syntax: 'nmap -p 80,443 <target>', description: 'Scan specific ports' },
+        { syntax: 'nmap -p- <target>', description: 'Scan all 65535 ports' },
+        { syntax: 'nmap --top-ports 20 <target>', description: 'Top 20 most common ports' },
+      ]},
+      { category: 'Timing', commands: [
+        { syntax: 'nmap -T0 <target>', description: 'Paranoid — very slow, IDS evasion' },
+        { syntax: 'nmap -T3 <target>', description: 'Normal (default)' },
+        { syntax: 'nmap -T4 <target>', description: 'Aggressive — faster, more detectable' },
+        { syntax: 'nmap -T5 <target>', description: 'Insane — fastest, very noisy' },
+      ]},
+      { category: 'Stealth', commands: [
+        { syntax: 'nmap -sS <target>', description: 'SYN stealth scan (requires root)' },
+        { syntax: 'nmap -f <target>', description: 'Fragment packets' },
+        { syntax: 'nmap -D RND:10 <target>', description: 'Decoy scans with 10 random IPs' },
+      ]},
+    ],
+  },
+  {
+    id: 'tool-burp', name: 'Burp Suite', category: 'Web Application Testing', icon: '🕷️',
+    description: 'Integrated platform for web application security testing. Industry standard for web app penetration testing.',
+    version: 'Community 2024.3', purpose: 'Intercept, analyze, and manipulate HTTP/HTTPS traffic. Test web applications for vulnerabilities.',
+    offensivePurpose: 'Find and exploit web vulnerabilities — SQL injection, XSS, CSRF, authentication bypass, business logic flaws.',
+    defensiveDetection: 'Burp generates unusual HTTP patterns — parameter manipulation, high request rates to specific endpoints, encoded payloads in requests.',
+    installation: 'Download from portswigger.com/burp/communitydownload',
+    features: ['HTTP Proxy/Intercept', 'Repeater (manual testing)', 'Intruder (automated attacks)', 'Scanner (vulnerability detection)', 'Decoder', 'Comparer', 'Sequencer'],
+    mitreMapping: ['T1190 Exploit Public-Facing Application', 'T1059 Web Shell'],
+    owaspMapping: ['OWASP Top 10 — All categories'],
+    relatedTools: ['OWASP ZAP', 'Nikto', 'sqlmap'],
+    commands: [
+      { command: 'Target: ibanking.gfs.com', description: 'Configure Burp to proxy traffic through the Internet Banking application', parameters: [], example: 'Configure browser proxy → 127.0.0.1:8080', output: `Burp Proxy intercepts all HTTP/S traffic.\nNavigate to https://ibanking.gfs.com/login\n\nRequest intercepted:\nPOST /api/auth/login HTTP/1.1\nHost: ibanking.gfs.com\nContent-Type: application/json\n\n{\"username\":\"admin@test.com\",\"password\":\"GFS2024\"}` },
+    ],
+    labs: [{ id: 'lab-burp-01', title: 'Intercept and Analyze Login Traffic', difficulty: 'beginner', objective: 'Use Burp Suite to intercept the Internet Banking login request and analyze the authentication mechanism.', targetHost: 'WEB-01', hints: ['Configure your browser proxy first', 'Enable Intercept in Burp Proxy tab'], steps: [
+      { order: 1, title: 'Configure Proxy', instruction: 'Set your browser to use Burp as a proxy: 127.0.0.1:8080. Install the Burp CA certificate for HTTPS interception.', expectedOutput: 'Browser configured. HTTPS traffic now routes through Burp.', explanation: 'Burp acts as a man-in-the-middle proxy. It intercepts all traffic between your browser and the target.' },
+      { order: 2, title: 'Navigate to Login Page', instruction: 'Open https://ibanking.gfs.com/login in your proxied browser.', expectedOutput: 'Login page loads. Burp Proxy tab shows the intercepted HTTP request.', explanation: 'The login page is our initial target. We want to analyze the authentication mechanism.' },
+      { order: 3, title: 'Submit Login and Intercept', instruction: 'Enter test credentials and click login. Observe the intercepted request in Burp Proxy.', command: 'POST /api/auth/login HTTP/1.1\nHost: ibanking.gfs.com\nContent-Type: application/json\n\n{"username":"test@test.com","password":"Test123"}', expectedOutput: 'The login request is captured. We can see the authentication endpoint accepts JSON and transmits credentials.', explanation: 'The authentication mechanism sends credentials as JSON. This is our first data point. Next, we would test for SQL injection, brute force, and token analysis.', blueTeamView: { siemAlert: 'Sentinel: Failed login for test@test.com from 10.10.99.10', windowsEvents: [], firewallLogs: ['Outbound HTTPS to ibanking.gfs.com from Red Team segment'], investigation: 'This is expected Red Team activity from authorized engagement PT-2025-003.' } },
+    ]}],
+    cheatSheet: [
+      { category: 'Proxy', commands: [{ syntax: 'Browser → 127.0.0.1:8080', description: 'Route traffic through Burp' }, { syntax: 'Intercept → Forward/Drop', description: 'Control intercepted requests' }] },
+      { category: 'Repeater', commands: [{ syntax: 'Send request to Repeater (Ctrl+R)', description: 'Manually modify and resend requests' }, { syntax: 'Analyze response codes', description: 'Identify vulnerabilities from response differences' }] },
+      { category: 'Intruder', commands: [{ syntax: 'Set payload positions §around§ parameters', description: 'Define attack injection points' }, { syntax: 'Sniper / Battering Ram / Pitchfork', description: 'Choose attack type' }] },
+    ],
+  },
+  {
+    id: 'tool-sqlmap', name: 'SQLMap', category: 'Web Application Testing', icon: '💉',
+    description: 'Automatic SQL injection detection and exploitation tool.',
+    version: '1.8.2', purpose: 'Detect and exploit SQL injection vulnerabilities in web applications.',
+    offensivePurpose: 'Extract data from databases, bypass authentication, and gain shell access through SQL injection vulnerabilities.',
+    defensiveDetection: 'SQLMap generates distinctive HTTP traffic — parameter manipulation, UNION-based payloads, time-based blind injection patterns.',
+    installation: 'git clone https://github.com/sqlmapproject/sqlmap.git',
+    features: ['Automatic injection detection', 'Database fingerprinting', 'Data extraction', 'File read/write', 'OS shell access', 'Password cracking'],
+    mitreMapping: ['T1190 Exploit Public-Facing Application', 'T1005 Data from Local System'],
+    owaspMapping: ['A03:2021 — Injection'],
+    relatedTools: ['Burp Suite', 'Havij', 'jSQL'],
+    commands: [
+      { command: 'sqlmap -u "https://ibanking.gfs.com/api/search?id=1" --dbs', description: 'Test for SQL injection and enumerate databases', parameters: [
+        { flag: '-u', description: 'Target URL with injectable parameter', required: true },
+        { flag: '--dbs', description: 'Enumerate databases', required: false },
+      ], example: 'sqlmap -u "https://ibanking.gfs.com/api/search?id=1" --dbs', output: `[*] starting @ 10:45:00 2025-01-15\n[10:45:01] [INFO] testing connection to the target URL\n[10:45:03] [INFO] GET parameter 'id' is vulnerable.\nType: boolean-based blind\nType: error-based\nType: UNION query\n\n[10:45:05] [INFO] fetching database names\navailable databases [3]:\n[*] gfs_internet_banking\n[*] gfs_core_banking\n[*] information_schema`, warning: 'This extracted real database names from the target. In a real engagement, this would be a critical finding.' },
+    ],
+    labs: [{ id: 'lab-sql-01', title: 'SQL Injection on WEB-01', difficulty: 'intermediate', objective: 'Identify and exploit a SQL injection vulnerability on the Internet Banking search endpoint.', targetHost: 'WEB-01', hints: ['Look at the URL parameters', 'Try adding a single quote'], steps: [
+      { order: 1, title: 'Identify Injectable Parameter', instruction: 'Use Burp Suite to capture a search request from the Internet Banking portal. Send it to Repeater.', expectedOutput: 'GET /api/search?q=test HTTP/1.1\nHost: ibanking.gfs.com', explanation: 'The search parameter is a common injection vector.' },
+      { order: 2, title: 'Test for Injection', instruction: 'Add a single quote to the parameter and observe the response.', command: "GET /api/search?q=test' HTTP/1.1", expectedOutput: "HTTP/1.1 500 Internal Server Error\n{\"error\":\"You have an error in your SQL syntax near ''test'' at line 1\"}", explanation: 'The error message confirms SQL injection — the database does not sanitize the input. The single quote broke the query syntax.' },
+      { order: 3, title: 'Extract Data with SQLMap', instruction: 'Use SQLMap to automatically enumerate databases and extract data.', command: 'sqlmap -u "https://ibanking.gfs.com/api/search?q=test" --dbs --batch', expectedOutput: 'available databases [3]:\n[*] gfs_internet_banking\n[*] gfs_core_banking\n[*] information_schema', explanation: 'SQLMap confirmed the injection and extracted database names. The gfs_internet_banking database likely contains customer credentials.', blueTeamView: { siemAlert: 'Sentinel: SQL injection pattern detected in HTTP requests to ibanking.gfs.com', firewallLogs: ['WAF: SQL injection attempt blocked — partial bypass detected'], detectionRule: 'Sigma: SQL Injection Attempt — Error-based', investigation: 'WAF detected the initial attempt but SQLMap bypassed it with time-based blind injection. Escalate to AppSec.' } },
+    ]}],
+    cheatSheet: [
+      { category: 'Basic', commands: [{ syntax: 'sqlmap -u "URL?param=1"', description: 'Test URL parameter' }, { syntax: 'sqlmap -u "URL" --forms', description: 'Test all forms on page' }, { syntax: 'sqlmap -r request.txt', description: 'Test from saved request file' }] },
+      { category: 'Data Extraction', commands: [{ syntax: '--dbs', description: 'Enumerate databases' }, { syntax: '-D dbname --tables', description: 'List tables in database' }, { syntax: '-D dbname -T tablename --dump', description: 'Dump table contents' }] },
+      { category: 'Advanced', commands: [{ syntax: '--os-shell', description: 'Get operating system shell' }, { syntax: '--file-read /etc/passwd', description: 'Read file from server' }, { syntax: '--batch', description: 'Auto-confirm all prompts' }] },
+    ],
+  },
+  {
+    id: 'tool-hydra', name: 'Hydra', category: 'Password Security', icon: '🔑',
+    description: 'Fast network logon cracker supporting many protocols.',
+    version: '9.5', purpose: 'Brute-force and dictionary attacks against login forms and authentication mechanisms.',
+    offensivePurpose: 'Crack weak passwords on web applications, SSH, RDP, FTP, SMB, and database authentication.',
+    defensiveDetection: 'Brute force generates high-volume authentication failures from single source. Detect via: failed login thresholds, account lockouts, event logs.',
+    installation: 'sudo apt install hydra',
+    features: ['HTTP/HTTPS form brute force', 'SSH brute force', 'RDP brute force', 'SMB brute force', 'Database brute force', 'Parallel connection support'],
+    mitreMapping: ['T1110 Brute Force'],
+    owaspMapping: ['A07:2021 — Identification and Authentication Failures'],
+    relatedTools: ['Medusa', 'Ncrack', 'John the Ripper'],
+    commands: [
+      { command: 'hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.10.101 http-post-form "/api/auth/login:username=^USER^&password=^PASS^:Invalid credentials"', description: 'Brute force the GFS Internet Banking login', parameters: [
+        { flag: '-l', description: 'Username to test', required: true },
+        { flag: '-P', description: 'Password wordlist', required: true },
+        { flag: 'http-post-form', description: 'Target protocol and endpoint', required: true },
+      ], example: 'hydra -l admin -P rockyou.txt 10.10.10.101 http-post-form "/api/auth/login:username=^USER^&password=^PASS^:Invalid"', output: `Hydra v9.5 (c) 2023 by van Hauser/THC\nHydra starting at 2025-01-15 11:00:00\n[DATA] max 16 tasks per 1 server, 14344399 login tries\n[DATA] attacking http-post-form://10.10.10.101:80/api/auth/login\n[80][http-post-form] host: 10.10.10.101   login: admin   password: GFS@admin2024\n1 of 1 target successfully completed.\nValid password found: GFS@admin2024` },
+    ],
+    labs: [{ id: 'lab-hydra-01', title: 'Brute Force Internet Banking', difficulty: 'beginner', objective: 'Use Hydra to brute force the login form on WEB-01.', targetHost: 'WEB-01', hints: ['You need to know the form field names', 'Check the error message on failed login'], steps: [
+      { order: 1, title: 'Capture Login Request', instruction: 'Use Burp Suite to capture the login POST request. Identify the form field names and failure message.', expectedOutput: 'POST /api/auth/login\n{"username":"test","password":"test"}\nResponse: {"error":"Invalid credentials"}', explanation: 'We need three things for Hydra: the URL path, the form field names, and the string that indicates a failed login.' },
+      { order: 2, title: 'Run Hydra Attack', instruction: 'Use Hydra with a wordlist to brute force the login.', command: 'hydra -l admin -P /usr/share/wordlists/rockyou.txt 10.10.10.101 http-post-form "/api/auth/login:username=^USER^&password=^PASS^:Invalid"', expectedOutput: '[80][http-post-form] login: admin  password: GFS@admin2024\nValid password found', explanation: 'Hydra found the admin password in the wordlist: GFS@admin2024. This password exists in common password lists, meaning it is weak.', blueTeamView: { siemAlert: 'Sentinel: 1,247 failed login attempts for admin account in 5 minutes', windowsEvents: ['Event 4625: Account lockout threshold reached — admin account locked'], detectionRule: 'Sigma: Brute Force — Multiple Failed Logins from Single Source', investigation: 'This is expected Red Team brute force activity. Do NOT unlock the account during the engagement.' } },
+    ]}],
+    cheatSheet: [
+      { category: 'HTTP', commands: [{ syntax: 'hydra -l user -P wordlist.txt TARGET http-post-form "/login:user=^USER^&pass=^PASS^:F=incorrect"', description: 'Brute force HTTP POST form' }, { syntax: 'hydra -l user -P wordlist.txt TARGET https-get "/login?user=^USER^&pass=^PASS^:F=incorrect"', description: 'Brute force HTTP GET form' }] },
+      { category: 'SSH / RDP', commands: [{ syntax: 'hydra -l root -P wordlist.txt TARGET ssh', description: 'SSH brute force' }, { syntax: 'hydra -l administrator -P wordlist.txt TARGET rdp', description: 'RDP brute force' }] },
+      { category: 'Options', commands: [{ syntax: '-t 16', description: '16 parallel connections (default 16)' }, { syntax: '-f', description: 'Stop after first valid password found' }, { syntax: '-V', description: 'Verbose — show each attempt' }, { syntax: '-vV', description: 'Very verbose — show login+password for each attempt' }] },
+    ],
+  },
+  {
+    id: 'tool-gobuster', name: 'Gobuster', category: 'Reconnaissance', icon: '🗂️',
+    description: 'Directory/file brute forcing tool for web servers.',
+    version: '3.6', purpose: 'Discover hidden directories, files, and virtual hosts on web servers.',
+    offensivePurpose: 'Find hidden admin panels, backup files, configuration files, and sensitive endpoints that are not linked from the main application.',
+    defensiveDetection: 'Directory brute forcing generates high-volume 404 responses from single source. Detect via: WAF rules, web server log analysis, rate-based detection.',
+    installation: 'sudo apt install gobuster',
+    features: ['Directory brute forcing', 'DNS subdomain brute forcing', 'Virtual host discovery', 'Wildcard detection', 'Multiple output formats'],
+    mitreMapping: ['T1595.003 Wordlist Scanning'],
+    owaspMapping: ['OWASP Testing Guide — Configuration Management'],
+    relatedTools: ['Feroxbuster', 'Dirb', 'Dirsearch'],
+    commands: [
+      { command: 'gobuster dir -u https://ibanking.gfs.com -w /usr/share/wordlists/dirb/common.txt -x php,txt,html,bak -t 20', description: 'Directory brute force with extensions', parameters: [
+        { flag: '-u', description: 'Target URL', required: true },
+        { flag: '-w', description: 'Wordlist', required: true },
+        { flag: '-x', description: 'File extensions to test', required: false },
+        { flag: '-t', description: 'Number of threads', required: false },
+      ], example: 'gobuster dir -u https://ibanking.gfs.com -w common.txt -x php,txt,bak', output: `Gobuster v3.6\n===============================================================\n/.htaccess            (Status: 403) [Size: 277]\n/.htpasswd            (Status: 403) [Size: 277]\n/admin                (Status: 302) [Size: 0]\n/admin/login.php      (Status: 200) [Size: 3421]\n/backup               (Status: 301) [Size: 178]\n/backup/config.bak    (Status: 200) [Size: 8432]\n/api                  (Status: 200) [Size: 142]\n/debug                (Status: 200) [Size: 567]\n/server-status        (Status: 200) [Size: 4521]\n===============================================================\nFinished\n===============================================================\n403: 2 | 301: 1 | 302: 2 | 200: 5` },
+    ],
+    labs: [{ id: 'lab-gobuster-01', title: 'Discover Hidden Directories on WEB-01', difficulty: 'beginner', objective: 'Use Gobuster to find hidden directories and files on the Internet Banking web server.', targetHost: 'WEB-01', hints: ['Try common directory names', 'Test for backup files'], steps: [
+      { order: 1, title: 'Run Directory Scan', instruction: 'Run Gobuster with a common wordlist against the target.', command: 'gobuster dir -u https://ibanking.gfs.com -w /usr/share/wordlists/dirb/common.txt -x php,txt,bak -t 20', expectedOutput: '/admin (Status: 302)\n/admin/login.php (Status: 200)\n/backup (Status: 301)\n/backup/config.bak (Status: 200)\n/debug (Status: 200)', explanation: 'Gobuster found several interesting paths. The /admin panel is the most interesting, and /backup/config.bak could contain sensitive configuration data.' },
+      { order: 2, title: 'Analyze Findings', instruction: 'Investigate the /backup directory and the /debug endpoint.', expectedOutput: '/backup/config.bak contains database connection strings\n/debug exposes application version and environment info', explanation: 'The backup file contains plaintext database credentials. The debug endpoint leaks internal information. Both are critical findings.' },
+    ]}],
+    cheatSheet: [
+      { category: 'Directory Scan', commands: [{ syntax: 'gobuster dir -u URL -w wordlist.txt', description: 'Basic directory scan' }, { syntax: 'gobuster dir -u URL -w wordlist.txt -x php,html,txt', description: 'With file extensions' }, { syntax: 'gobuster dir -u URL -w wordlist.txt -b 404,403', description: 'Exclude status codes' }] },
+      { category: 'DNS', commands: [{ syntax: 'gobuster dns -d gfs.com -w subdomains.txt', description: 'Subdomain brute force' }] },
+    ],
+  },
+  {
+    id: 'tool-metasploit', name: 'Metasploit', category: 'Exploitation', icon: '💥',
+    description: 'The world\'s most used penetration testing framework.',
+    version: '6.4.1', purpose: 'Develop, test, and execute exploit code against remote targets.',
+    offensivePurpose: 'Exploit known vulnerabilities to gain unauthorized access, establish persistence, and pivot through networks.',
+    defensiveDetection: 'Metasploit generates distinctive network patterns — reverse shells, meterpreter sessions, payload delivery via various protocols.',
+    installation: 'sudo apt install metasploit-framework',
+    features: ['Exploit database (2000+)', 'Payload generation', 'Meterpreter sessions', 'Post-exploitation modules', 'Auxiliary scanner modules', 'Credential database'],
+    mitreMapping: ['T1203 Exploitation for Client Execution', 'T1059 Command and Scripting Interpreter'],
+    owaspMapping: ['A03:2021 — Injection', 'A05:2021 — Security Misconfiguration'],
+    relatedTools: ['Cobalt Strike', 'Sliver', 'Brute Ratel'],
+    commands: [
+      { command: 'msfconsole', description: 'Launch Metasploit console', parameters: [], example: 'msfconsole', output: `=[ metasploit v6.4.1-dev ]\n+ -- --=[ 2413 exploits - 1242 auxiliary ]\n+ -- --=[ 429 payloads - 47 encoders - 11 nops ]\nmsf6 >` },
+      { command: 'use exploit/windows/smb/ms17_010_eternalblue', description: 'Select EternalBlue exploit for SMB', parameters: [], example: 'use exploit/windows/smb/ms17_010_eternalblue', output: `[*] No payload configured, defaulting to windows/x64/meterpreter/reverse_tcp\nmsf6 exploit(windows/smb/ms17_010_eternalblue) >` },
+    ],
+    labs: [{ id: 'lab-msf-01', title: 'Exploit APP-01 via SMB', difficulty: 'advanced', objective: 'Use Metasploit to exploit a known vulnerability on the GFS application server.', targetHost: 'APP-01', hints: ['Check the SMB configuration from your Nmap scan', 'Look for known SMB vulnerabilities'], steps: [
+      { order: 1, title: 'Identify Vulnerability', instruction: 'From your Nmap scan, APP-01 has SMB (port 445) open. Check if SMB signing is required.', command: 'nmap --script smb-security-mode -p 445 10.10.20.50', expectedOutput: 'SMB signing: Not required', explanation: 'SMB signing is not required, which enables relay attacks. Combined with other misconfigurations, this could lead to full compromise.' },
+      { order: 2, title: 'Search for Exploits', instruction: 'Use Metasploit to search for SMB exploits.', command: 'msfconsole -q -x "search smb type:exploit; exit"', expectedOutput: 'exploit/windows/smb/ms17_010_eternalblue\nexploit/windows/smb/ms17_010_psexec\nexploit/linux/samba/is_known_pipename', explanation: 'Multiple SMB exploits are available. Select the one matching the target OS.' },
+    ]}],
+    cheatSheet: [
+      { category: 'Console', commands: [{ syntax: 'msfconsole', description: 'Launch interactive console' }, { syntax: 'msfconsole -q', description: 'Quiet mode — no banner' }, { syntax: 'search type:exploit windows', description: 'Search exploits by platform' }] },
+      { category: 'Workflow', commands: [{ syntax: 'use exploit/...', description: 'Select an exploit module' }, { syntax: 'set RHOSTS target', description: 'Set target host' }, { syntax: 'set LHOST attacker', description: 'Set listener host' }, { syntax: 'exploit / run', description: 'Execute the exploit' }, { syntax: 'sessions -l', description: 'List active sessions' }] },
+    ],
+  },
+  {
+    id: 'tool-wireshark', name: 'Wireshark', category: 'Network Analysis', icon: '🦈',
+    description: 'The world\'s foremost network protocol analyzer.',
+    version: '4.2.3', purpose: 'Capture and analyze network packets in real-time.',
+    offensivePurpose: 'Analyze captured traffic for credentials, sensitive data, and protocol weaknesses.',
+    defensiveDetection: 'Wireshark itself is a passive tool but the traffic analysis reveals attack patterns.',
+    installation: 'sudo apt install wireshark',
+    features: ['Packet capture', 'Deep protocol inspection', 'Display filters', 'Follow TCP streams', 'IO graphs', 'Statistics'],
+    mitreMapping: ['T1040 Network Sniffing'],
+    owaspMapping: [],
+    relatedTools: ['tcpdump', 'tshark', 'NetworkMiner'],
+    commands: [
+      { command: 'wireshark -i eth0 -f "tcp port 443" -k', description: 'Capture HTTPS traffic on eth0', parameters: [
+        { flag: '-i', description: 'Interface to capture on', required: true },
+        { flag: '-f', description: 'Capture filter', required: false },
+        { flag: '-k', description: 'Start capturing immediately', required: false },
+      ], example: 'wireshark -i eth0 -f "tcp port 443"', output: `Capturing on 'eth0'\n\nNo.  Time     Source          Destination    Protocol  Info\n1  0.000000  10.10.99.10     10.10.10.101   TCP       SYN → 443\n2  0.002312  10.10.10.101    10.10.99.10    TCP       SYN,ACK ← 443\n3  0.002456  10.10.99.10     10.10.10.101   TCP       ACK → 443\n4  0.003102  10.10.99.10     10.10.10.101   TLSv1.3  Client Hello\n5  0.005623  10.10.10.101    10.10.99.10    TLSv1.3  Server Hello` },
+    ],
+    labs: [{ id: 'lab-ws-01', title: 'Capture and Analyze Login Traffic', difficulty: 'beginner', objective: 'Use Wireshark to capture network traffic during a login attempt and identify transmitted credentials.', targetHost: 'WEB-01', hints: ['Use a display filter for HTTP', 'Follow the TCP stream'], steps: [
+      { order: 1, title: 'Start Capture', instruction: 'Start Wireshark capture on the network interface connected to the GFS lab network.', expectedOutput: 'Capture started. Packets appearing in real-time.', explanation: 'Wireshark is now capturing all network traffic.' },
+      { order: 2, title: 'Apply Filter', instruction: 'Apply a display filter to focus on HTTP traffic to WEB-01.', command: 'http && ip.addr == 10.10.10.101', expectedOutput: 'Only HTTP packets to/from WEB-01 are visible.', explanation: 'Filtering reduces noise and focuses on our target traffic.' },
+      { order: 3, title: 'Follow TCP Stream', instruction: 'Right-click a login request and select Follow → TCP Stream.', expectedOutput: 'POST /api/auth/login HTTP/1.1\n{"username":"test@test.com","password":"Test123"}', explanation: 'The TCP stream reconstruction shows the plaintext credentials transmitted over the network. This demonstrates why HTTPS is critical for all authentication.', blueTeamView: { siemAlert: 'Sentinel: Cleartext credentials detected in network traffic', detectionRule: 'Zeek: HTTP POST with JSON credentials', investigation: 'If this is NOT an authorized test, this could indicate credential theft via network sniffing.' } },
+    ]}],
+    cheatSheet: [
+      { category: 'Display Filters', commands: [{ syntax: 'http', description: 'Show only HTTP traffic' }, { syntax: 'ip.addr == 10.10.10.101', description: 'Traffic to/from specific IP' }, { syntax: 'tcp.port == 445', description: 'SMB traffic' }, { syntax: 'dns.qry.name contains "gfs"', description: 'DNS queries containing gfs' }] },
+      { category: 'Capture', commands: [{ syntax: 'Capture → Options', description: 'Configure capture interface' }, { syntax: 'Capture → Stop', description: 'Stop capture' }, { syntax: 'File → Export Packets', description: 'Save capture to file' }] },
+    ],
+  },
+  {
+    id: 'tool-hashcat', name: 'Hashcat', category: 'Password Security', icon: '🔓',
+    description: 'Advanced password recovery utility supporting GPU acceleration.',
+    version: '6.2.6', purpose: 'Crack password hashes using GPU-accelerated brute force, dictionary, and rule-based attacks.',
+    offensivePurpose: 'Recover passwords from leaked hashes, dumped SAM files, and captured NTLM hashes.',
+    defensiveDetection: 'Hashcat runs locally — detect via EDR (suspicious GPU utilization), or via the hash dumps that preceded the cracking attempt.',
+    installation: 'sudo apt install hashcat',
+    features: ['GPU acceleration', '300+ hash types', 'Rule-based attacks', 'Mask attacks', 'Hybrid attacks', 'Distributed mode'],
+    mitreMapping: ['T1003 OS Credential Dumping', 'T1110.002 Password Cracking'],
+    owaspMapping: ['A07:2021 — Identification and Authentication Failures'],
+    relatedTools: ['John the Ripper', 'Ophcrack', 'NTLMRelayx'],
+    commands: [
+      { command: 'hashcat -m 1000 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt', description: 'Crack NTLM hashes with dictionary attack', parameters: [
+        { flag: '-m 1000', description: 'Hash mode 1000 = NTLM', required: true },
+        { flag: '-a 0', description: 'Attack mode 0 = dictionary', required: true },
+      ], example: 'hashcat -m 1000 -a 0 hashes.txt rockyou.txt', output: `hashcat (v6.2.6) starting...\n\nHashes: 24 digests; 24 unique digests\nBitmaps: 16 bits, 65536 entries, 0x0000ffff mask\n\nSession..........: hashcat\nStatus...........: Cracked\nSpeed.#1.........: 1423.5 kH/s\nRecovered........: 24/24 (100.00%)\n\nAdministrator:GFS@admin2024\nsvc-neft-ops:N3p@$$w0rd!2024\ns.reddy:GFS$s.reddy2024` },
+    ],
+    labs: [],
+    cheatSheet: [
+      { category: 'Common Modes', commands: [{ syntax: '-m 1000', description: 'NTLM hash' }, { syntax: '-m 1800', description: 'sha512crypt ($6$)' }, { syntax: '-m 3200', description: 'bcrypt ($2b$)' }, { syntax: '-m 5600', description: 'NetNTLMv2' }] },
+      { category: 'Attack Modes', commands: [{ syntax: '-a 0', description: 'Dictionary attack' }, { syntax: '-a 3', description: 'Mask/brute force attack' }, { syntax: '-a 6', description: 'Hybrid wordlist+mask' }, { syntax: '-a 7', description: 'Hybrid mask+wordlist' }] },
+    ],
+  },
+  {
+    id: 'tool-nikto', name: 'Nikto', category: 'Web Application Testing', icon: '🕷️',
+    description: 'Open source web server scanner performing comprehensive tests against web servers.',
+    version: '2.5.0', purpose: 'Scan web servers for misconfigurations, outdated software, and dangerous files.',
+    offensivePurpose: 'Quick web server vulnerability assessment — find default pages, outdated software, missing security headers.',
+    defensiveDetection: 'Nikto generates many requests to different paths — detect via WAF rate limiting or web server log anomalies.',
+    installation: 'sudo apt install nikto',
+    features: ['Web server fingerprinting', 'Misconfiguration detection', 'Outdated software detection', 'Dangerous file discovery', 'Server information leakage'],
+    mitreMapping: ['T1592 Gather Victim Host Information'],
+    owaspMapping: ['OWASP Testing Guide — Configuration Management'],
+    relatedTools: ['OWASP ZAP', 'WhatWeb', 'Wpscan'],
+    commands: [
+      { command: 'nikto -h https://ibanking.gfs.com -ssl', description: 'Scan Internet Banking HTTPS with SSL', parameters: [
+        { flag: '-h', description: 'Target host', required: true },
+        { flag: '-ssl', description: 'Force SSL mode', required: false },
+      ], example: 'nikto -h https://ibanking.gfs.com -ssl', output: `- Nikto v2.5.0\n---------------------------------------------------------------------------\n+ Target IP:     10.10.10.101\n+ Target Hostname: ibanking.gfs.com\n+ Target Port:   443\n+ Start Time:    2025-01-15 12:00:00\n---------------------------------------------------------------------------\n+ Server: nginx/1.24.0\n+ /admin: Admin directory found\n+ /backup: Backup directory found\n+ OSVDB-3268: /icons/: Directory indexing found\n+ Header: X-Frame-Options header not found\n+ Header: Content-Security-Policy header not found\n+ SSL: Certificate subject: ibanking.gfs.com\n+ /debug: Debug endpoint found — leaks application version\n+ 17 host(s) tested` },
+    ],
+    labs: [],
+    cheatSheet: [
+      { category: 'Basic', commands: [{ syntax: 'nikto -h URL', description: 'Basic scan' }, { syntax: 'nikto -h URL -ssl', description: 'HTTPS scan' }, { syntax: 'nikto -h URL -o report.html -Format htm', description: 'Output to HTML report' }] },
+      { category: 'Tuning', commands: [{ syntax: '-Tuning 123b', description: 'Test specific vulnerability categories' }, { syntax: '-Plugins @@cgi', description: 'Only test CGI vulnerabilities' }] },
+    ],
+  },
+];

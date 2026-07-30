@@ -98,7 +98,7 @@ export interface InfrastructureNode {
   ip?: string;
   owner: string;
   businessPurpose: string;
-  technicalRole: string;
+  technicalRole?: string;
   criticality: 'critical' | 'high' | 'medium' | 'low';
   dependencies: string[];
   connectedTo: string[];

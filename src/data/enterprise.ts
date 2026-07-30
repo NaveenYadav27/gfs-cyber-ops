@@ -156,3 +156,29 @@ export function getEmployeesByDepartment(deptCode: string): Employee[] {
 export function getEmployee(id: string): Employee | undefined {
   return [...LEADERSHIP, ...SOC_TEAM].find((e) => e.id === id);
 }
+
+// ── MOCKS FOR COMPATIBILITY ──
+export const MOCK_USER: any = {
+  id: 'emp-026',
+  name: 'Sai Krishna',
+  email: 'sai.krishna@gfs.com',
+  role: 'SOC Analyst — Tier 1',
+  department: 'SOC',
+  location: 'Hyderabad',
+  level: 3,
+  avatar: '',
+  manager: 'emp-021',
+};
+
+export const MOCK_ALERTS: any[] = [];
+export const GFS_MODULES: any[] = [];
+export const MOCK_MESSAGES: any[] = [];
+export const MOCK_TICKETS: any[] = [];
+export const MOCK_CHANGES: any[] = [];
+export const MOCK_ACTIVITY: any[] = [];
+export const ENTERPRISE_SYSTEMS: any[] = [];
+
+export const ONBOARDING_STEPS: any[] = [
+  { id: 1, title: 'Welcome' }, { id: 2, title: 'Team' }
+];
+export const TEAM_MEMBERS = SOC_TEAM;
