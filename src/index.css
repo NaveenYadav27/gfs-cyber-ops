@@ -316,3 +316,26 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+.light-theme {
+  --color-gfs-base: #f3f4f6;
+  --color-gfs-deep: #ffffff;
+  --color-gfs-surface: #f9fafb;
+  --color-gfs-elevated: #ffffff;
+  --color-gfs-hover: #e5e7eb;
+  --color-gfs-active: #d1d5db;
+  --color-gfs-text: #111827;
+  --color-gfs-text-secondary: #4b5563;
+  --color-gfs-text-muted: #6b7280;
+  --color-gfs-text-disabled: #9ca3af;
+  --color-gfs-border: #d1d5db;
+  --color-gfs-border-light: #e5e7eb;
+  --color-gfs-border-focus: #3b82f6;
+  --color-gfs-accent: #0f766e;
+  --color-gfs-accent-dim: rgba(15, 118, 110, 0.08);
+  --color-gfs-accent-hover: rgba(15, 118, 110, 0.15);
+  --color-gfs-blue: #2563eb;
+  --color-gfs-blue-dim: rgba(37, 99, 235, 0.08);
+  --color-gfs-red: #dc2626;
+  --color-gfs-red-dim: rgba(220, 38, 38, 0.08);
+}
