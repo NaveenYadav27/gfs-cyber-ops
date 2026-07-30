@@ -129,8 +129,6 @@ export default function App() {
     }
   }, [theme]);
 
-  if (!onboardingCompleted) return <AppLayout><Onboarding /></AppLayout>;
-
   return (
     <AppLayout>
       <PageRouter />
