@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Shield, AlertTriangle, Clock, Radio, Search, Settings, ChevronDown, LogOut, User,
-  Zap, Wifi,
+  Zap, Wifi, Sun, Moon,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { EnterpriseSearch } from '@/components/ui/EnterpriseSearch';
@@ -11,7 +11,7 @@ import { useStore } from '@/store/useStore';
 import { useLearningEngine } from '@/store/useLearningEngine';
 
 export function GlobalHeader() {
-  const { user, logout } = useStore();
+  const { user, logout, theme, setTheme } = useStore();
   const { totalXP, level, currentMissionId } = useLearningEngine();
   const [showProfile, setShowProfile] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -76,6 +76,14 @@ export function GlobalHeader() {
         <span className="text-[10px] text-[var(--color-gfs-accent)] font-semibold">Lv.{level}</span>
         <span className="text-[10px] text-[var(--color-gfs-text-muted)] font-mono">{totalXP} XP</span>
       </div>
+
+      {/* Theme Toggle */}
+      <button
+        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        className="w-7 h-7 rounded-lg flex items-center justify-center text-[var(--color-gfs-text-muted)] hover:text-[var(--color-gfs-text)] hover:bg-[var(--color-gfs-hover)] transition-colors"
+      >
+        {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      </button>
 
       {/* Notifications */}
       <NotificationCenter />
