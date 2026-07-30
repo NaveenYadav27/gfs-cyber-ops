@@ -7,7 +7,7 @@ import { InspectorPanel } from '@/components/ui/InspectorPanel';
 import { useInspector } from '@/store/useInspector';
 import { useLearningEngine } from '@/store/useLearningEngine';
 import { motion, AnimatePresence } from 'framer-motion';
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 
 // Lazy load pages for code splitting
 const Dashboard = lazy(() => import('@/pages/Dashboard').then(m => ({ default: m.Dashboard })));
@@ -119,7 +119,15 @@ function GlobalInspector() {
 }
 
 export default function App() {
-  const { isAuthenticated, onboardingCompleted } = useStore();
+  const { isAuthenticated, onboardingCompleted, theme } = useStore();
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-theme');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+    }
+  }, [theme]);
 
   if (!isAuthenticated) return <Login />;
   if (!onboardingCompleted) return <AppLayout><Onboarding /></AppLayout>;
