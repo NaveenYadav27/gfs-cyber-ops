@@ -119,7 +119,7 @@ function GlobalInspector() {
 }
 
 export default function App() {
-  const { isAuthenticated, onboardingCompleted, theme } = useStore();
+  const { onboardingCompleted, theme } = useStore();
 
   useEffect(() => {
     if (theme === 'light') {
@@ -129,7 +129,6 @@ export default function App() {
     }
   }, [theme]);
 
-  if (!isAuthenticated) return <Login />;
   if (!onboardingCompleted) return <AppLayout><Onboarding /></AppLayout>;
 
   return (
