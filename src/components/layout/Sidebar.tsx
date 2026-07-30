@@ -26,11 +26,11 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'news', label: 'Enterprise News', icon: Newspaper, section: 'OVERVIEW' },
   { id: 'activity', label: 'Activity Feed', icon: Activity, section: 'OVERVIEW' },
 
-  // SECURITY OPERATIONS
-  { id: 'soc', label: 'SOC Console', icon: Monitor, section: 'SECURITY OPS' },
-  { id: 'incidents', label: 'Incidents', icon: AlertTriangle, section: 'SECURITY OPS' },
-  { id: 'playbooks', label: 'SOAR Playbooks', icon: Zap, section: 'SECURITY OPS' },
-  { id: 'messaging', label: 'Internal Mail', icon: MessageSquare, section: 'SECURITY OPS' },
+  // SOC WORKSPACE
+  { id: 'soc', label: 'SOC Console', icon: Monitor, section: 'SOC WORKSPACE' },
+  { id: 'incidents', label: 'Incidents', icon: AlertTriangle, section: 'SOC WORKSPACE' },
+  { id: 'playbooks', label: 'SOAR Playbooks', icon: Zap, section: 'SOC WORKSPACE' },
+  { id: 'messaging', label: 'Internal Mail', icon: MessageSquare, section: 'SOC WORKSPACE' },
 
   // SECURITY
   { id: 'threat-intel', label: 'Threat Intelligence', icon: Brain, section: 'SECURITY' },
