@@ -172,7 +172,52 @@ export const MOCK_USER: any = {
 
 export const MOCK_ALERTS: any[] = [];
 export const GFS_MODULES: any[] = [];
-export const MOCK_MESSAGES: any[] = [];
+export const MOCK_MESSAGES: any[] = [
+  {
+    id: 'msg-001',
+    from: 'Ananya Das',
+    fromRole: 'Chief Information Security Officer',
+    to: 'SOC Team',
+    subject: 'URGENT: Active Ransomware Campaign Targeting FI Sector',
+    body: 'Team,\n\nCERT-In has just issued a high-severity alert regarding a new ransomware variant specifically targeting the financial sector in India. The threat actors are utilizing advanced spear-phishing techniques masquerading as regulatory compliance updates from RBI.\n\nImmediate Actions Required:\n1. Update all Sentinel watchlists with the IOCs provided in the attached MISP event.\n2. Threat Hunting team: Initiate proactive sweeps across the enterprise for any signs of lateral movement.\n3. Increase monitoring severity for all inbound emails containing PDF or ZIP attachments originating from unknown domains.\n\nWe need full coverage on this immediately. Status report due at EOD standup.\n\nRegards,\nAnanya',
+    timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 mins ago
+    read: false,
+    priority: 'urgent'
+  },
+  {
+    id: 'msg-002',
+    from: 'Suresh Reddy',
+    fromRole: 'SOC Manager',
+    to: 'SOC Shift Leads',
+    subject: 'Shift Handover Notes - Morning Shift',
+    body: 'Shift Leads,\n\nMorning shift handover is complete. We had a relatively quiet shift with 14 low-severity alerts, mostly related to failed logins which were resolved via automated playbooks.\n\nPending items for Evening shift:\n- ALT-2025-9102: Still under investigation by Arjun. Appears to be anomalous PowerShell execution on WRK-LOAN-047, but need to rule out administrative scripts.\n- Keep an eye on the VPN gateways; we saw a minor spike in failed authentications from international IPs around 10:00 AM.\n\nPlease ensure all shift logs are updated in ServiceNow before 11:00 PM.\n\nThanks,\nSuresh',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(), // 4 hours ago
+    read: false,
+    priority: 'normal'
+  },
+  {
+    id: 'msg-003',
+    from: 'Harsha Vardhan',
+    fromRole: 'Threat Hunting Lead',
+    to: 'Sai Krishna',
+    subject: 'Welcome to the Team + Initial Assignments',
+    body: 'Welcome Sai!\n\nGlad to have you on board the Cyber Defense team. We have an intensive training program lined up for you over the next two weeks.\n\nFor your first assignment, please review the "SOC Fundamentals" module in the Training portal and familiarize yourself with the basic KQL queries we use for endpoint hunting.\n\nI have also shared a OneNote link with our standard operating procedures (SOPs). Please review the Alert Triage section by tomorrow.\n\nLet me know if you have any trouble accessing Sentinel or CrowdStrike.\n\nBest,\nHarsha',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), // 2 days ago
+    read: true,
+    priority: 'normal'
+  },
+  {
+    id: 'msg-004',
+    from: 'Rajesh Menon',
+    fromRole: 'Chief Information Officer',
+    to: 'Enterprise IT, Cyber Defense',
+    subject: 'Upcoming Maintenance Window: Azure ExpressRoute',
+    body: 'All,\n\nPlease be advised that there is a scheduled maintenance window for the primary Azure ExpressRoute connection this Saturday from 02:00 AM to 04:00 AM IST.\n\nTraffic will failover to the secondary VPN tunnels. We expect minor latency increases but no service disruption. \n\nSOC Team: Please be aware that this failover might trigger "Impossible Travel" or "Unusual Network Route" alerts in Sentinel. Correlate with this maintenance window before escalating.\n\nThanks,\nRajesh',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
+    read: true,
+    priority: 'high'
+  }
+];
 export const MOCK_TICKETS: any[] = [];
 export const MOCK_CHANGES: any[] = [];
 export const MOCK_ACTIVITY: any[] = [];
