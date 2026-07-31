@@ -75,9 +75,7 @@ export function OperationalWorkspace() {
       {renderContent()}
       
       {/* Pervasive Enterprise AI Assistant Overlay */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <EnterpriseAssistant />
-      </div>
+      <EnterpriseAssistant />
     </div>
   );
 }

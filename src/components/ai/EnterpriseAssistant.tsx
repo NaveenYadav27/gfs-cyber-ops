@@ -28,7 +28,7 @@ const EnterpriseAssistant = () => {
     return (
       <button 
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-2xl flex items-center justify-center transition-all transform hover:scale-105 z-50"
+        className="fixed bottom-6 left-[280px] bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-2xl flex items-center justify-center transition-all transform hover:scale-105 z-50"
       >
         <Bot size={24} />
       </button>
@@ -36,7 +36,7 @@ const EnterpriseAssistant = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-gray-950 border border-gray-800 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden font-sans">
+    <div className="fixed bottom-6 left-[280px] w-96 h-[600px] bg-gray-950 border border-gray-800 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden font-sans">
       <div className="bg-gray-900 border-b border-gray-800 p-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <div className="bg-blue-600/20 p-2 rounded-lg">
