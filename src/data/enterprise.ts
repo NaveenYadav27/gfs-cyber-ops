@@ -336,85 +336,154 @@ export const MOCK_ACTIVITY: any[] = [
 ];
 
 export const ENTERPRISE_SYSTEMS: any[] = [
+  // --- DMZ SYSTEMS ---
   {
-    id: 'sys-1',
-    name: 'Core Banking Mainframe',
-    type: 'mainframe',
-    category: 'compute',
-    status: 'online',
-    ip: '10.10.10.5',
-    location: 'Hyderabad DC',
-    owner: 'Infrastructure Team',
-    description: 'Primary core banking transaction processing system.',
-    dependencies: ['sys-2', 'sys-4'],
-    threats: ['DDoS', 'Insider Threat'],
-    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-    uptime: '99.99%',
-    criticality: 'critical',
-    ports: [22, 443, 8080],
-    services: ['SSH', 'HTTPS', 'BankingApp'],
-    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).toISOString(),
-    osVersion: 'z/OS 2.4'
-  },
-  {
-    id: 'sys-2',
-    name: 'iBanking Web Gateway',
-    type: 'web-server',
-    category: 'application',
-    status: 'online',
-    ip: '192.168.1.100',
-    location: 'Mumbai DR',
-    owner: 'Digital Channels',
+    id: 'sys-web', name: 'iBanking Web Gateway', type: 'web-server', category: 'application',
+    status: 'online', ip: '10.10.1.10', location: 'Mumbai DR', owner: 'Digital Channels',
     description: 'Customer facing retail banking web application gateway.',
-    dependencies: ['sys-1'],
-    threats: ['SQL Injection', 'Cross-Site Scripting', 'Credential Stuffing'],
+    dependencies: ['sys-db'], threats: ['SQL Injection', 'XSS', 'Credential Stuffing'],
     lastScan: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-    uptime: '99.95%',
-    criticality: 'critical',
-    ports: [80, 443],
-    services: ['HTTP', 'HTTPS'],
-    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
-    osVersion: 'Red Hat Enterprise Linux 8'
+    uptime: '99.95%', criticality: 'critical', ports: [80, 443], services: ['HTTP', 'HTTPS'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), osVersion: 'RHEL 8'
   },
   {
-    id: 'sys-3',
-    name: 'UPI Payment Gateway',
-    type: 'payment-gateway',
-    category: 'network',
-    status: 'degraded',
-    ip: '10.20.30.40',
-    location: 'Azure India South',
-    owner: 'Payments Team',
-    description: 'Real-time UPI transaction processing node connecting to NPCI.',
-    dependencies: ['sys-1'],
-    threats: ['API Abuse', 'DDoS'],
-    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-    uptime: '99.90%',
-    criticality: 'critical',
-    ports: [443, 8443],
-    services: ['HTTPS', 'CustomAPI'],
-    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
-    osVersion: 'Ubuntu 22.04 LTS'
-  },
-  {
-    id: 'sys-4',
-    name: 'Enterprise Active Directory',
-    type: 'domain-controller',
-    category: 'identity',
-    status: 'online',
-    ip: '10.0.0.10',
-    location: 'Hyderabad DC',
-    owner: 'IAM Team',
-    description: 'Primary domain controller for employee authentication.',
-    dependencies: [],
-    threats: ['Kerberoasting', 'Pass-the-Hash', 'Ransomware'],
+    id: 'sys-mail', name: 'Exchange Edge Server', type: 'mail-server', category: 'application',
+    status: 'online', ip: '10.10.1.20', location: 'Hyderabad DC', owner: 'IT Ops',
+    description: 'Inbound/Outbound mail relay and spam filtering.',
+    dependencies: ['sys-ad'], threats: ['Phishing', 'Malware Delivery'],
     lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-    uptime: '100%',
-    criticality: 'critical',
-    ports: [53, 88, 135, 389, 445, 636, 3268],
-    services: ['DNS', 'Kerberos', 'RPC', 'LDAP', 'SMB', 'LDAPS', 'Global Catalog'],
-    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
-    osVersion: 'Windows Server 2022'
+    uptime: '99.99%', criticality: 'high', ports: [25, 465, 587], services: ['SMTP'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(), osVersion: 'Windows Server 2022'
+  },
+  {
+    id: 'sys-dns', name: 'External DNS Server', type: 'dns-server', category: 'network',
+    status: 'online', ip: '10.10.1.30', location: 'Hyderabad DC', owner: 'Network Team',
+    description: 'External authoritative DNS server.',
+    dependencies: [], threats: ['DNS Amplification', 'Cache Poisoning'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '100%', criticality: 'high', ports: [53], services: ['DNS'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(), osVersion: 'Ubuntu 22.04 LTS'
+  },
+  {
+    id: 'sys-vpn', name: 'GlobalProtect VPN', type: 'vpn-gateway', category: 'network',
+    status: 'online', ip: '10.10.1.40', location: 'Hyderabad DC', owner: 'Network Team',
+    description: 'Remote access VPN for employees and vendors.',
+    dependencies: ['sys-ad'], threats: ['Credential Brute Force', 'Exploitation'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    uptime: '99.98%', criticality: 'critical', ports: [443, 500, 4500], services: ['HTTPS', 'IPsec'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), osVersion: 'PAN-OS 11.1'
+  },
+  {
+    id: 'sys-lb', name: 'F5 BIG-IP Load Balancer', type: 'load-balancer', category: 'network',
+    status: 'online', ip: '10.10.1.50', location: 'Hyderabad DC', owner: 'Network Team',
+    description: 'Application delivery controller distributing traffic across DMZ.',
+    dependencies: [], threats: ['DDoS'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '100%', criticality: 'critical', ports: [443], services: ['HTTPS'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).toISOString(), osVersion: 'TMOS 16.1'
+  },
+  {
+    id: 'sys-waf', name: 'Imperva WAF', type: 'waf', category: 'security',
+    status: 'online', ip: '10.10.1.60', location: 'Hyderabad DC', owner: 'Security Engineering',
+    description: 'Web Application Firewall filtering layer 7 attacks.',
+    dependencies: [], threats: ['Bypass Attempts'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '99.99%', criticality: 'critical', ports: [80, 443], services: ['HTTP', 'HTTPS'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString(), osVersion: 'Imperva OS'
+  },
+
+  // --- INTERNAL LAN SYSTEMS ---
+  {
+    id: 'sys-ad', name: 'Enterprise Active Directory', type: 'domain-controller', category: 'identity',
+    status: 'online', ip: '10.10.50.1', location: 'Hyderabad DC', owner: 'IAM Team',
+    description: 'Primary domain controller for employee authentication.',
+    dependencies: [], threats: ['Kerberoasting', 'Pass-the-Hash', 'Ransomware'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '100%', criticality: 'critical', ports: [53, 88, 135, 389, 445, 636, 3268], services: ['DNS', 'Kerberos', 'RPC', 'LDAP', 'SMB', 'LDAPS'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(), osVersion: 'Windows Server 2022'
+  },
+  {
+    id: 'sys-db', name: 'Core Banking Mainframe / DB', type: 'database', category: 'data',
+    status: 'online', ip: '10.10.50.20', location: 'Hyderabad DC', owner: 'DBA Team',
+    description: 'Primary core banking transaction database.',
+    dependencies: [], threats: ['Insider Threat', 'Data Exfiltration'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '99.99%', criticality: 'critical', ports: [1521, 22], services: ['Oracle TNS', 'SSH'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).toISOString(), osVersion: 'Oracle Linux 8'
+  },
+  {
+    id: 'sys-filesrv', name: 'Corporate File Server', type: 'file-server', category: 'data',
+    status: 'online', ip: '10.10.50.30', location: 'Hyderabad DC', owner: 'IT Ops',
+    description: 'Centralized network share for corporate documents.',
+    dependencies: ['sys-ad'], threats: ['Ransomware Encryption', 'Unauthorized Access'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '99.90%', criticality: 'medium', ports: [139, 445], services: ['NetBIOS', 'SMB'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), osVersion: 'Windows Server 2019'
+  },
+  {
+    id: 'sys-swift', name: 'SWIFT Alliance Gateway', type: 'financial-gateway', category: 'application',
+    status: 'online', ip: '10.10.50.80', location: 'Mumbai DR', owner: 'Treasury Ops',
+    description: 'International wire transfer and SWIFT messaging gateway.',
+    dependencies: ['sys-db'], threats: ['Advanced Persistent Threat (APT)', 'Fraud'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+    uptime: '99.99%', criticality: 'critical', ports: [443, 1414], services: ['HTTPS', 'IBM MQ'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), osVersion: 'RHEL 8'
+  },
+  {
+    id: 'sys-siem', name: 'Microsoft Sentinel Forwarder', type: 'log-forwarder', category: 'security',
+    status: 'online', ip: '10.10.50.100', location: 'Hyderabad DC', owner: 'SOC',
+    description: 'Aggregates on-prem logs and forwards to Azure Sentinel.',
+    dependencies: [], threats: ['Log Tampering'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '100%', criticality: 'high', ports: [514, 443], services: ['Syslog', 'HTTPS'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString(), osVersion: 'Ubuntu 22.04 LTS'
+  },
+  {
+    id: 'sys-endpoints', name: 'User Endpoint Subnet', type: 'workstations', category: 'endpoint',
+    status: 'online', ip: '10.10.50.60', location: 'Global Branches', owner: 'IT Ops',
+    description: 'Corporate user workstations and laptops segment.',
+    dependencies: ['sys-ad', 'sys-filesrv'], threats: ['Phishing', 'Malware', 'Insider Threat'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    uptime: '98.50%', criticality: 'medium', ports: [], services: [],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(), osVersion: 'Windows 11'
+  },
+
+  // --- CLOUD & EXTERNAL SYSTEMS ---
+  {
+    id: 'sys-azuread', name: 'Azure Active Directory', type: 'idp', category: 'identity',
+    status: 'online', ip: 'Cloud', location: 'Azure Global', owner: 'IAM Team',
+    description: 'Cloud identity provider, SSO, and MFA enforcement.',
+    dependencies: ['sys-ad'], threats: ['Account Takeover', 'Consent Phishing'],
+    lastScan: new Date().toISOString(),
+    uptime: '99.99%', criticality: 'critical', ports: [443], services: ['HTTPS'],
+    lastPatch: new Date().toISOString(), osVersion: 'SaaS'
+  },
+  {
+    id: 'sys-aws', name: 'AWS Production Environment', type: 'cloud-vpc', category: 'cloud',
+    status: 'online', ip: 'AWS ap-south-1', location: 'AWS Mumbai', owner: 'Cloud Ops',
+    description: 'Hosting for non-core microservices and analytics data lake.',
+    dependencies: ['sys-vpn'], threats: ['Misconfiguration', 'Exposed S3 Buckets'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
+    uptime: '99.95%', criticality: 'high', ports: [443], services: ['HTTPS', 'SSH'],
+    lastPatch: new Date().toISOString(), osVersion: 'Amazon Linux 2'
+  },
+  {
+    id: 'sys-socsoar', name: 'ServiceNow SecOps (SOAR)', type: 'soar', category: 'security',
+    status: 'online', ip: 'Cloud', location: 'ServiceNow SaaS', owner: 'SOC',
+    description: 'Security Orchestration, Automation, and Response platform.',
+    dependencies: ['sys-siem'], threats: ['API Key Compromise'],
+    lastScan: new Date().toISOString(),
+    uptime: '99.99%', criticality: 'high', ports: [443], services: ['HTTPS'],
+    lastPatch: new Date().toISOString(), osVersion: 'SaaS'
+  },
+  {
+    id: 'sys-backup', name: 'Veeam Backup & Replication', type: 'backup-server', category: 'data',
+    status: 'online', ip: '10.10.80.10', location: 'Mumbai DR', owner: 'IT Ops',
+    description: 'Centralized backup server for disaster recovery.',
+    dependencies: ['sys-ad'], threats: ['Ransomware Deletion of Backups'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '100%', criticality: 'critical', ports: [9392, 10001], services: ['Veeam Services'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).toISOString(), osVersion: 'Windows Server 2022'
   }
 ];
 
