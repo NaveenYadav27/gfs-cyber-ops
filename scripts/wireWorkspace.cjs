@@ -1,13 +1,16 @@
+const fs = require('fs');
+const path = require('path');
 
+const content = `
 import React, { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { PageHeader } from '@/components/layout/PageHeader';
-import NetworkTopology from '@/components/enterprise/NetworkTopology';
-import ActiveDirectoryTree from '@/components/enterprise/ActiveDirectoryTree';
+import { NetworkTopology } from '@/components/enterprise/NetworkTopology';
+import { ActiveDirectoryTree } from '@/components/enterprise/ActiveDirectoryTree';
 import { UnifiedTimeline } from '@/components/enterprise/UnifiedTimeline';
 import { InvestigationGraph } from '@/components/enterprise/InvestigationGraph';
-import ExecutiveCommandCenter from '@/components/enterprise/ExecutiveCommandCenter';
-import EnterpriseAssistant from '@/components/ai/EnterpriseAssistant';
+import { ExecutiveCommandCenter } from '@/components/enterprise/ExecutiveCommandCenter';
+import { EnterpriseAssistant } from '@/components/ai/EnterpriseAssistant';
 import { Globe, Shield, Activity, Scale } from 'lucide-react';
 import '@/components/enterprise/UnifiedTimeline.css';
 
@@ -24,8 +27,8 @@ export function OperationalWorkspace() {
       return (
         <div className="space-y-6">
           <div className="flex gap-4 border-b border-[var(--color-gfs-border-light)] pb-2">
-            <button onClick={() => setActiveTab('topology')} className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'topology' ? 'bg-[var(--color-gfs-accent)] text-white' : 'text-[var(--color-gfs-text-muted)] hover:bg-[var(--color-gfs-hover)]'}`}>Network Topology</button>
-            <button onClick={() => setActiveTab('ad')} className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'ad' ? 'bg-[var(--color-gfs-accent)] text-white' : 'text-[var(--color-gfs-text-muted)] hover:bg-[var(--color-gfs-hover)]'}`}>Active Directory</button>
+            <button onClick={() => setActiveTab('topology')} className={\`px-4 py-2 text-sm font-medium rounded-md \${activeTab === 'topology' ? 'bg-[var(--color-gfs-accent)] text-white' : 'text-[var(--color-gfs-text-muted)] hover:bg-[var(--color-gfs-hover)]'}\`}>Network Topology</button>
+            <button onClick={() => setActiveTab('ad')} className={\`px-4 py-2 text-sm font-medium rounded-md \${activeTab === 'ad' ? 'bg-[var(--color-gfs-accent)] text-white' : 'text-[var(--color-gfs-text-muted)] hover:bg-[var(--color-gfs-hover)]'}\`}>Active Directory</button>
           </div>
           {activeTab === 'topology' ? <NetworkTopology /> : <ActiveDirectoryTree />}
         </div>
@@ -72,3 +75,7 @@ export function OperationalWorkspace() {
     </div>
   );
 }
+`;
+
+fs.writeFileSync(path.join(__dirname, '../src/pages/OperationalWorkspace.tsx'), content);
+console.log('OperationalWorkspace wired up with Phase 2 components.');

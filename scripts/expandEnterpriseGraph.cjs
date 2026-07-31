@@ -1,4 +1,7 @@
+const fs = require('fs');
+const path = require('path');
 
+const content = `
 // ============================================================================
 // GFS ENTERPRISE DIGITAL TWIN GRAPH
 // ============================================================================
@@ -65,3 +68,7 @@ export const GRAPH = {
   getRelatedEvents: (id: string) => Object.values(TIMELINE).filter(e => e.relatedIds.includes(id)),
   getEntityOwner: (id: string) => EMPLOYEES[SERVERS[id]?.ownerId || APPLICATIONS[id]?.ownerId || id] || null,
 };
+`;
+
+fs.writeFileSync(path.join(__dirname, '../src/data/enterprise/index.ts'), content);
+console.log('Enterprise Graph Expanded.');
