@@ -10,6 +10,7 @@ import { useLearningEngine } from '@/store/useLearningEngine';
 import { useStore } from '@/store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { Suspense, lazy } from 'react';
+import { OperationalWorkspace } from '@/pages/OperationalWorkspace';
 
 // ── Lazy Page Imports ──
 const EnterpriseDashboard = lazy(() => import('@/pages/EnterpriseDashboard').then((m) => ({ default: m.EnterpriseDashboard })));
@@ -55,9 +56,8 @@ const Notebook = lazy(() => import('@/pages/Notebook').then((m) => ({ default: m
 const LearningAnalytics = lazy(() => import('@/pages/LearningAnalytics').then((m) => ({ default: m.LearningAnalytics })));
 const CareerProgression = lazy(() => import('@/pages/CareerProgression').then((m) => ({ default: m.CareerProgression })));
 const ModulePage = lazy(() => import('@/pages/ModulePage').then((m) => ({ default: m.ModulePage })));
-const OperationalWorkspace = lazy(() => import('@/pages/OperationalWorkspace').then((m) => ({ default: m.OperationalWorkspace })));
 
-const PAGE_MAP: Record<string, React.LazyExoticComponent<React.FC>> = {
+const PAGE_MAP: Record<string, React.FC | React.LazyExoticComponent<React.FC>> = {
   dashboard: EnterpriseDashboard,
   about_gfs: AboutGFS,
   'about-gfs': AboutGFS,
