@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '@/store/useStore';
 import { PageHeader } from '@/components/layout/PageHeader';
 import NetworkTopology from '@/components/enterprise/NetworkTopology';
@@ -12,8 +12,19 @@ import { Globe, Shield, Activity, Scale } from 'lucide-react';
 import '@/components/enterprise/UnifiedTimeline.css';
 
 export function OperationalWorkspace() {
-  const { currentPage } = useStore();
-  const [activeTab, setActiveTab] = useState('topology');
+  const { currentPage, setCurrentPage } = useStore();
+  const [activeTab, setActiveTab] = useState(currentPage === 'ent-ad' ? 'ad' : 'topology');
+
+  // Sync sidebar navigation with inner tabs
+  useEffect(() => {
+    if (currentPage === 'ent-topology') setActiveTab('topology');
+    if (currentPage === 'ent-ad') setActiveTab('ad');
+  }, [currentPage]);
+
+  const handleTabChange = (tab: 'topology' | 'ad') => {
+    setActiveTab(tab);
+    setCurrentPage(tab === 'topology' ? 'ent-topology' : 'ent-ad');
+  };
 
   // Intelligent Routing based on the requested Enterprise Domain
   const renderContent = () => {
@@ -24,8 +35,8 @@ export function OperationalWorkspace() {
       return (
         <div className="space-y-6">
           <div className="flex gap-4 border-b border-[var(--color-gfs-border-light)] pb-2">
-            <button onClick={() => setActiveTab('topology')} className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'topology' ? 'bg-[var(--color-gfs-accent)] text-white' : 'text-[var(--color-gfs-text-muted)] hover:bg-[var(--color-gfs-hover)]'}`}>Network Topology</button>
-            <button onClick={() => setActiveTab('ad')} className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'ad' ? 'bg-[var(--color-gfs-accent)] text-white' : 'text-[var(--color-gfs-text-muted)] hover:bg-[var(--color-gfs-hover)]'}`}>Active Directory</button>
+            <button onClick={() => handleTabChange('topology')} className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'topology' ? 'bg-[var(--color-gfs-accent)] text-white' : 'text-[var(--color-gfs-text-muted)] hover:bg-[var(--color-gfs-hover)]'}`}>Network Topology</button>
+            <button onClick={() => handleTabChange('ad')} className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'ad' ? 'bg-[var(--color-gfs-accent)] text-white' : 'text-[var(--color-gfs-text-muted)] hover:bg-[var(--color-gfs-hover)]'}`}>Active Directory</button>
           </div>
           {activeTab === 'topology' ? <NetworkTopology /> : <ActiveDirectoryTree />}
         </div>
