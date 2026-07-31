@@ -76,14 +76,12 @@ const PAGE_MAP: Record<string, React.LazyExoticComponent<React.FC>> = {
   career: CareerJourney, career_center: CareerCenter, skills: CareerProgression, certs: CareerCenter,
   profile: MyProfile, equipment: MyEquipment, settings: MyProfile,
   missions: MissionDashboard, 'mission-active': MissionCanvas, notebook: Notebook, analytics: LearningAnalytics,
-  // DYNAMIC ENTERPRISE ROUTES
-  'itsm-dashboard': OperationalWorkspace, 'itsm-incidents': OperationalWorkspace, 'itsm-requests': OperationalWorkspace, 'itsm-problems': OperationalWorkspace, 'itsm-change': OperationalWorkspace, 'itsm-cmdb': OperationalWorkspace,
-  'noc-dashboard': OperationalWorkspace, 'noc-network': OperationalWorkspace, 'noc-servers': OperationalWorkspace, 'noc-cloud': OperationalWorkspace,
-  'soc-dashboard': OperationalWorkspace, 'soc-alerts': OperationalWorkspace, 'soc-cases': OperationalWorkspace, 'soc-hunting': OperationalWorkspace, 'soc-siem': OperationalWorkspace,
-  'grc-dashboard': OperationalWorkspace, 'grc-risk': OperationalWorkspace, 'grc-compliance': OperationalWorkspace, 'grc-audit': OperationalWorkspace,
-  'off-dashboard': OperationalWorkspace, 'off-engagements': OperationalWorkspace,
-  'purple-dashboard': OperationalWorkspace, 'purple-sim': OperationalWorkspace,
-  'exec-dashboard': OperationalWorkspace, 'exec-risk': OperationalWorkspace,
+
+  // PHASE 2 ENTERPRISE INTELLIGENCE LAYER
+  'ent-topology': OperationalWorkspace,
+  'ent-ad': OperationalWorkspace,
+  'ent-investigation': OperationalWorkspace,
+  'ent-exec': OperationalWorkspace,
 };
 
 function LoadingFallback() {
@@ -102,13 +100,6 @@ function PageRouter() {
   const { currentMissionId } = useLearningEngine();
   const effectivePage = currentMissionId ? 'mission-active' : currentPage;
   const PageComponent = PAGE_MAP[effectivePage];
-
-  useEffect(() => {
-    const scrollContainer = document.getElementById('main-scroll-container');
-    if (scrollContainer) {
-      scrollContainer.scrollTop = 0;
-    }
-  }, [effectivePage]);
 
   return (
     <Suspense fallback={<LoadingFallback />}>

@@ -17,10 +17,10 @@ export function OperationalWorkspace() {
 
   // Intelligent Routing based on the requested Enterprise Domain
   const renderContent = () => {
-    if (currentPage.startsWith('exec')) {
+    if (currentPage === 'ent-exec') {
       return <ExecutiveCommandCenter />;
     }
-    if (currentPage.startsWith('noc')) {
+    if (currentPage === 'ent-topology' || currentPage === 'ent-ad') {
       return (
         <div className="space-y-6">
           <div className="flex gap-4 border-b border-[var(--color-gfs-border-light)] pb-2">
@@ -31,7 +31,7 @@ export function OperationalWorkspace() {
         </div>
       );
     }
-    if (currentPage.startsWith('soc') || currentPage.startsWith('itsm')) {
+    if (currentPage === 'ent-investigation') {
       return (
         <div className="grid grid-cols-2 gap-6 h-[800px]">
           <div className="h-full overflow-hidden"><InvestigationGraph /></div>
@@ -45,11 +45,9 @@ export function OperationalWorkspace() {
   };
 
   const getHeader = () => {
-    if (currentPage.startsWith('exec')) return { title: 'Executive Command Center', icon: Globe };
-    if (currentPage.startsWith('noc')) return { title: 'Enterprise Infrastructure (NOC)', icon: Activity };
-    if (currentPage.startsWith('soc')) return { title: 'Cyber Defense Operations (SOC)', icon: Shield };
-    if (currentPage.startsWith('itsm')) return { title: 'IT Service Management', icon: Activity };
-    if (currentPage.startsWith('grc')) return { title: 'Risk & Compliance (GRC)', icon: Scale };
+    if (currentPage === 'ent-exec') return { title: 'Executive Command Center', icon: Globe };
+    if (currentPage === 'ent-topology' || currentPage === 'ent-ad') return { title: 'Enterprise Digital Twin', icon: Activity };
+    if (currentPage === 'ent-investigation') return { title: 'Enterprise Investigation Engine', icon: Shield };
     return { title: 'Enterprise Intelligence', icon: Globe };
   };
 

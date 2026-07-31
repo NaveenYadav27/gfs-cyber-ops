@@ -6,7 +6,7 @@ import {
   KeyRound, ShieldCheck, Scale, BookOpen, ClipboardList, Layers, Crosshair,
   Target, Blend, Trophy, Zap, Award, Settings, ChevronLeft, LogOut, Clock,
   MessageSquare, Briefcase, MapPin, Newspaper, Package, User, Play, BarChart3,
-  ShieldAlert, BugPlay, NetworkIcon, ShieldAlertIcon, Database
+  ShieldAlert, BugPlay, NetworkIcon, ShieldAlertIcon,
 } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { useLearningEngine } from '@/store/useLearningEngine';
@@ -20,44 +20,70 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  // ITSM
-  { id: 'itsm-dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'ITSM' },
-  { id: 'itsm-incidents', label: 'Incidents', icon: AlertTriangle, section: 'ITSM' },
-  { id: 'itsm-requests', label: 'Service Requests', icon: ClipboardList, section: 'ITSM' },
-  { id: 'itsm-problems', label: 'Problems', icon: Bug, section: 'ITSM' },
-  { id: 'itsm-change', label: 'Change Management', icon: Layers, section: 'ITSM' },
-  { id: 'itsm-cmdb', label: 'CMDB', icon: Database, section: 'ITSM' },
+  // ENTERPRISE INTELLIGENCE (Phase 2)
+  { id: 'ent-topology', label: 'Network Digital Twin', icon: Globe, section: 'ENTERPRISE INTELLIGENCE' },
+  { id: 'ent-ad', label: 'Active Directory Map', icon: NetworkIcon, section: 'ENTERPRISE INTELLIGENCE' },
+  { id: 'ent-investigation', label: 'Enterprise Timeline', icon: Clock, section: 'ENTERPRISE INTELLIGENCE' },
+  { id: 'ent-exec', label: 'Executive Intelligence', icon: Briefcase, section: 'ENTERPRISE INTELLIGENCE' },
 
-  // NOC
-  { id: 'noc-dashboard', label: 'Operations Dashboard', icon: Activity, section: 'NOC' },
-  { id: 'noc-network', label: 'Network Monitoring', icon: Network, section: 'NOC' },
-  { id: 'noc-servers', label: 'Server Monitoring', icon: Server, section: 'NOC' },
-  { id: 'noc-cloud', label: 'Cloud Monitoring', icon: Cloud, section: 'NOC' },
+  // OVERVIEW
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'OVERVIEW' },
+  { id: 'schedule', label: 'My Schedule', icon: Clock, section: 'OVERVIEW' },
+  { id: 'news', label: 'Enterprise News', icon: Newspaper, section: 'OVERVIEW' },
+  { id: 'activity', label: 'Activity Feed', icon: Activity, section: 'OVERVIEW' },
 
-  // SOC
-  { id: 'soc-dashboard', label: 'Dashboard', icon: Shield, section: 'SOC' },
-  { id: 'soc-alerts', label: 'Alert Queue', icon: AlertTriangle, section: 'SOC' },
-  { id: 'soc-cases', label: 'Cases', icon: Briefcase, section: 'SOC' },
-  { id: 'soc-hunting', label: 'Threat Hunting', icon: Crosshair, section: 'SOC' },
-  { id: 'soc-siem', label: 'SIEM', icon: Radar, section: 'SOC' },
+  // SOC WORKSPACE
+  { id: 'soc', label: 'SOC Console', icon: Monitor, section: 'SOC WORKSPACE' },
+  { id: 'incidents', label: 'Incidents', icon: AlertTriangle, section: 'SOC WORKSPACE' },
+  { id: 'playbooks', label: 'SOAR Playbooks', icon: Zap, section: 'SOC WORKSPACE' },
+  { id: 'messaging', label: 'Internal Mail', icon: MessageSquare, section: 'SOC WORKSPACE' },
 
-  // GRC
-  { id: 'grc-dashboard', label: 'Dashboard', icon: Scale, section: 'GRC' },
-  { id: 'grc-risk', label: 'Risk Register', icon: AlertTriangle, section: 'GRC' },
-  { id: 'grc-compliance', label: 'Compliance', icon: ShieldCheck, section: 'GRC' },
-  { id: 'grc-audit', label: 'Audit', icon: ClipboardList, section: 'GRC' },
+  // SECURITY
+  { id: 'threat-intel', label: 'Threat Intelligence', icon: Brain, section: 'SECURITY' },
+  { id: 'vulnerabilities', label: 'Vulnerabilities', icon: Bug, section: 'SECURITY' },
+  { id: 'siem', label: 'SIEM Analytics', icon: Radar, section: 'SECURITY' },
+  { id: 'edr', label: 'EDR Console', icon: Scan, section: 'SECURITY' },
+  { id: 'firewall', label: 'Firewall Mgmt', icon: Shield, section: 'SECURITY' },
 
-  // OFFENSIVE SECURITY
-  { id: 'off-dashboard', label: 'Dashboard', icon: Crosshair, section: 'OFFENSIVE SECURITY' },
-  { id: 'off-engagements', label: 'Engagements', icon: Briefcase, section: 'OFFENSIVE SECURITY' },
+  // INFRASTRUCTURE
+  { id: 'enterprise-map', label: 'Infrastructure', icon: Globe, section: 'INFRASTRUCTURE' },
+  { id: 'ad', label: 'Active Directory', icon: Building2, section: 'INFRASTRUCTURE' },
+  { id: 'cloud', label: 'Cloud (Azure / AWS)', icon: Cloud, section: 'INFRASTRUCTURE' },
+  { id: 'network', label: 'Network', icon: Network, section: 'INFRASTRUCTURE' },
 
-  // PURPLE TEAM
-  { id: 'purple-dashboard', label: 'Dashboard', icon: Blend, section: 'PURPLE TEAM' },
-  { id: 'purple-sim', label: 'Attack Simulation', icon: Play, section: 'PURPLE TEAM' },
+  // IDENTITY & ACCESS
+  { id: 'users', label: 'Employee Directory', icon: Users, section: 'IDENTITY' },
+  { id: 'access', label: 'Access Requests', icon: KeyRound, section: 'IDENTITY' },
+  { id: 'pam', label: 'Privileged Access', icon: ShieldCheck, section: 'IDENTITY' },
 
-  // EXECUTIVE OPERATIONS
-  { id: 'exec-dashboard', label: 'Executive Dashboard', icon: LayoutDashboard, section: 'EXECUTIVE OPERATIONS' },
-  { id: 'exec-risk', label: 'Risk Overview', icon: Scale, section: 'EXECUTIVE OPERATIONS' },
+  // COMPLIANCE
+  { id: 'risk', label: 'Risk Register', icon: Scale, section: 'COMPLIANCE' },
+  { id: 'audit', label: 'Audit Log', icon: ClipboardList, section: 'COMPLIANCE' },
+  { id: 'frameworks', label: 'Frameworks', icon: ShieldCheck, section: 'COMPLIANCE' },
+
+  // OFFENSIVE
+  { id: 'ethical-hacking', label: 'Ethical Hacking', icon: Crosshair, section: 'OFFENSIVE' },
+  { id: 'vapt', label: 'VAPT', icon: Target, section: 'OFFENSIVE' },
+  { id: 'purple-team', label: 'Purple Team', icon: Blend, section: 'OFFENSIVE' },
+
+  // ENTERPRISE
+  { id: 'business-units', label: 'Business Units', icon: Briefcase, section: 'GFS ENTERPRISE' },
+  { id: 'departments', label: 'Departments', icon: Layers, section: 'GFS ENTERPRISE' },
+  { id: 'office-tour', label: 'Office Tour', icon: MapPin, section: 'GFS ENTERPRISE' },
+  { id: 'policies', label: 'Policies & Culture', icon: BookOpen, section: 'GFS ENTERPRISE' },
+
+  // MY CAREER
+  { id: 'missions', label: 'Missions', icon: Play, section: 'MY CAREER' },
+  { id: 'modules', label: 'Training', icon: BookOpen, section: 'MY CAREER' },
+  { id: 'career', label: 'Career Center', icon: Trophy, section: 'MY CAREER' },
+  { id: 'skills', label: 'Skills Matrix', icon: Zap, section: 'MY CAREER' },
+  { id: 'notebook', label: 'Notebook', icon: FileText, section: 'MY CAREER' },
+  { id: 'analytics', label: 'Analytics', icon: BarChart3, section: 'MY CAREER' },
+  { id: 'profile', label: 'My Profile', icon: User, section: 'MY CAREER' },
+  { id: 'equipment', label: 'My Equipment', icon: Package, section: 'MY CAREER' },
+
+  // SYSTEM
+  { id: 'settings', label: 'Settings', icon: Settings, section: 'SYSTEM' },
 ];
 
 export function Sidebar() {
