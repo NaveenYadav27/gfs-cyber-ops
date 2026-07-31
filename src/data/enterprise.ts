@@ -228,25 +228,194 @@ export const MOCK_MESSAGES: any[] = [
   }
 ];
 export const MOCK_TICKETS: any[] = [
-  { id: 'INC-90421', title: 'Phishing Email - HR Benefits', status: 'in-progress', priority: 'high', created: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), updated: new Date(Date.now() - 1000 * 60 * 30).toISOString(), assignedTo: 'Sai Krishna', description: 'User reported suspicious email claiming to be from HR about new benefits.' },
-  { id: 'INC-90422', title: 'Firewall Block: Known C2', status: 'closed', priority: 'medium', created: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), updated: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(), assignedTo: 'System', description: 'Automated block of outbound traffic to known Command & Control IP.' }
+  {
+    id: 'INC-90421',
+    title: 'Phishing Email - HR Benefits',
+    type: 'incident',
+    status: 'in-progress',
+    priority: 'p2-high',
+    assignee: 'Sai Krishna',
+    reporter: 'John Doe',
+    created: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    updated: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    description: 'User reported suspicious email claiming to be from HR about new benefits.',
+    category: 'Security Event'
+  },
+  {
+    id: 'INC-90422',
+    title: 'Firewall Block: Known C2',
+    type: 'incident',
+    status: 'closed',
+    priority: 'p3-medium',
+    assignee: 'System',
+    reporter: 'Automated Alert',
+    created: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    updated: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
+    description: 'Automated block of outbound traffic to known Command & Control IP.',
+    category: 'Network Security'
+  },
+  {
+    id: 'REQ-10928',
+    title: 'Access Request - AWS Production',
+    type: 'service-request',
+    status: 'open',
+    priority: 'p4-low',
+    assignee: 'Identity Team',
+    reporter: 'Jane Smith',
+    created: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+    updated: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+    description: 'Requesting read-only access to AWS Production subscription for auditing purposes.',
+    category: 'Access Management'
+  }
 ];
 
 export const MOCK_CHANGES: any[] = [
-  { id: 'CHG-30192', title: 'Update WAF Ruleset for iBanking', status: 'scheduled', risk: 'high', scheduledDate: new Date(Date.now() + 1000 * 60 * 60 * 48).toISOString(), requester: 'Security Engineering', description: 'Deploying new OWASP Top 10 blocking rules to production WAF.' },
-  { id: 'CHG-30193', title: 'Sentinel Agent Deployment', status: 'pending-approval', risk: 'low', scheduledDate: new Date(Date.now() + 1000 * 60 * 60 * 72).toISOString(), requester: 'IT Ops', description: 'Rolling out Sentinel agent update to 500 endpoints in wave 2.' }
+  {
+    id: 'CHG-30192',
+    title: 'Update WAF Ruleset for iBanking',
+    type: 'normal',
+    status: 'scheduled',
+    changeManager: 'Suresh Reddy',
+    requester: 'Security Engineering',
+    risk: 'high',
+    plannedDate: new Date(Date.now() + 1000 * 60 * 60 * 48).toISOString(),
+    description: 'Deploying new OWASP Top 10 blocking rules to production WAF.',
+    justification: 'Required for compliance and to mitigate recent attack trends.',
+    rollbackPlan: 'Revert to previous WAF policy snapshot.',
+    affectedSystems: ['sys-2']
+  },
+  {
+    id: 'CHG-30193',
+    title: 'Sentinel Agent Deployment',
+    type: 'standard',
+    status: 'approved',
+    changeManager: 'Rajesh Menon',
+    requester: 'IT Ops',
+    risk: 'low',
+    plannedDate: new Date(Date.now() + 1000 * 60 * 60 * 72).toISOString(),
+    description: 'Rolling out Sentinel agent update to 500 endpoints in wave 2.',
+    justification: 'Routine agent upgrade to support new detection capabilities.',
+    rollbackPlan: 'Uninstall new agent via SCCM and push previous stable version.',
+    affectedSystems: ['sys-1']
+  }
 ];
 
 export const MOCK_ACTIVITY: any[] = [
-  { id: 'act-1', type: 'alert_triage', description: 'Sai Krishna started investigating ALT-2025-9102', timestamp: new Date(Date.now() - 1000 * 60 * 10).toISOString(), user: 'Sai Krishna' },
-  { id: 'act-2', type: 'ticket_close', description: 'INC-90422 closed by Automation', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(), user: 'System' },
-  { id: 'act-3', type: 'login', description: 'Suresh Reddy logged in', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(), user: 'Suresh Reddy' }
+  {
+    id: 'act-1',
+    timestamp: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
+    type: 'investigation',
+    message: 'Sai Krishna started investigating ALT-2025-9102',
+    severity: 'medium',
+    user: 'Sai Krishna'
+  },
+  {
+    id: 'act-2',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
+    type: 'system',
+    message: 'INC-90422 closed by Automation',
+    severity: 'success',
+    user: 'System'
+  },
+  {
+    id: 'act-3',
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
+    type: 'user',
+    message: 'Suresh Reddy logged in',
+    severity: 'info',
+    user: 'Suresh Reddy'
+  },
+  {
+    id: 'act-4',
+    timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+    type: 'deployment',
+    message: 'New detection rule deployed: Suspicious PowerShell',
+    severity: 'success',
+    user: 'Harsha Vardhan'
+  }
 ];
 
 export const ENTERPRISE_SYSTEMS: any[] = [
-  { id: 'sys-1', name: 'Core Banking', status: 'operational', uptime: '99.99%', lastIncident: '34 days ago' },
-  { id: 'sys-2', name: 'iBanking Web', status: 'operational', uptime: '99.95%', lastIncident: '12 days ago' },
-  { id: 'sys-3', name: 'UPI Gateway', status: 'degraded', uptime: '99.90%', lastIncident: '2 hours ago' }
+  {
+    id: 'sys-1',
+    name: 'Core Banking Mainframe',
+    type: 'mainframe',
+    category: 'compute',
+    status: 'online',
+    ip: '10.10.10.5',
+    location: 'Hyderabad DC',
+    owner: 'Infrastructure Team',
+    description: 'Primary core banking transaction processing system.',
+    dependencies: ['sys-2', 'sys-4'],
+    threats: ['DDoS', 'Insider Threat'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '99.99%',
+    criticality: 'critical',
+    ports: [22, 443, 8080],
+    services: ['SSH', 'HTTPS', 'BankingApp'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).toISOString(),
+    osVersion: 'z/OS 2.4'
+  },
+  {
+    id: 'sys-2',
+    name: 'iBanking Web Gateway',
+    type: 'web-server',
+    category: 'application',
+    status: 'online',
+    ip: '192.168.1.100',
+    location: 'Mumbai DR',
+    owner: 'Digital Channels',
+    description: 'Customer facing retail banking web application gateway.',
+    dependencies: ['sys-1'],
+    threats: ['SQL Injection', 'Cross-Site Scripting', 'Credential Stuffing'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+    uptime: '99.95%',
+    criticality: 'critical',
+    ports: [80, 443],
+    services: ['HTTP', 'HTTPS'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+    osVersion: 'Red Hat Enterprise Linux 8'
+  },
+  {
+    id: 'sys-3',
+    name: 'UPI Payment Gateway',
+    type: 'payment-gateway',
+    category: 'network',
+    status: 'degraded',
+    ip: '10.20.30.40',
+    location: 'Azure India South',
+    owner: 'Payments Team',
+    description: 'Real-time UPI transaction processing node connecting to NPCI.',
+    dependencies: ['sys-1'],
+    threats: ['API Abuse', 'DDoS'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    uptime: '99.90%',
+    criticality: 'critical',
+    ports: [443, 8443],
+    services: ['HTTPS', 'CustomAPI'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
+    osVersion: 'Ubuntu 22.04 LTS'
+  },
+  {
+    id: 'sys-4',
+    name: 'Enterprise Active Directory',
+    type: 'domain-controller',
+    category: 'identity',
+    status: 'online',
+    ip: '10.0.0.10',
+    location: 'Hyderabad DC',
+    owner: 'IAM Team',
+    description: 'Primary domain controller for employee authentication.',
+    dependencies: [],
+    threats: ['Kerberoasting', 'Pass-the-Hash', 'Ransomware'],
+    lastScan: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    uptime: '100%',
+    criticality: 'critical',
+    ports: [53, 88, 135, 389, 445, 636, 3268],
+    services: ['DNS', 'Kerberos', 'RPC', 'LDAP', 'SMB', 'LDAPS', 'Global Catalog'],
+    lastPatch: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+    osVersion: 'Windows Server 2022'
+  }
 ];
 
 export const ONBOARDING_STEPS: any[] = [
