@@ -170,8 +170,17 @@ export const MOCK_USER: any = {
   manager: 'emp-021',
 };
 
-export const MOCK_ALERTS: any[] = [];
-export const GFS_MODULES: any[] = [];
+export const MOCK_ALERTS: any[] = [
+  { id: 'ALT-2025-9102', title: 'Suspicious PowerShell Execution', severity: 'high', status: 'investigating', source: 'CrowdStrike Falcon', timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(), description: 'PowerShell executed with encoded command on WRK-LOAN-047', assignee: 'emp-021' },
+  { id: 'ALT-2025-9103', title: 'Impossible Travel Detected', severity: 'medium', status: 'new', source: 'Azure AD', timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(), description: 'Login from Mumbai and London within 2 hours for svc-neft-ops', assignee: null },
+  { id: 'ALT-2025-9104', title: 'Multiple Failed Logins', severity: 'low', status: 'closed', source: 'Azure AD', timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString(), description: '15 failed logins for user priya.nair@gfs.com', assignee: 'emp-022' },
+];
+
+export const GFS_MODULES: any[] = [
+  { id: 'mod-1', title: 'SOC Fundamentals', description: 'Core SOC processes and alert triage.', category: 'Foundation', level: 'beginner', progress: 100, completed: true, prerequisites: [], unlocked: true },
+  { id: 'mod-2', title: 'KQL Mastery', description: 'Advanced Kusto Query Language for Sentinel.', category: 'SIEM', level: 'intermediate', progress: 45, completed: false, prerequisites: ['mod-1'], unlocked: true },
+  { id: 'mod-3', title: 'Malware Analysis', description: 'Static and dynamic analysis of malware.', category: 'Forensics', level: 'advanced', progress: 0, completed: false, prerequisites: ['mod-2'], unlocked: false },
+];
 export const MOCK_MESSAGES: any[] = [
   {
     id: 'msg-001',
@@ -218,10 +227,27 @@ export const MOCK_MESSAGES: any[] = [
     priority: 'high'
   }
 ];
-export const MOCK_TICKETS: any[] = [];
-export const MOCK_CHANGES: any[] = [];
-export const MOCK_ACTIVITY: any[] = [];
-export const ENTERPRISE_SYSTEMS: any[] = [];
+export const MOCK_TICKETS: any[] = [
+  { id: 'INC-90421', title: 'Phishing Email - HR Benefits', status: 'in-progress', priority: 'high', created: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), updated: new Date(Date.now() - 1000 * 60 * 30).toISOString(), assignedTo: 'Sai Krishna', description: 'User reported suspicious email claiming to be from HR about new benefits.' },
+  { id: 'INC-90422', title: 'Firewall Block: Known C2', status: 'closed', priority: 'medium', created: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), updated: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(), assignedTo: 'System', description: 'Automated block of outbound traffic to known Command & Control IP.' }
+];
+
+export const MOCK_CHANGES: any[] = [
+  { id: 'CHG-30192', title: 'Update WAF Ruleset for iBanking', status: 'scheduled', risk: 'high', scheduledDate: new Date(Date.now() + 1000 * 60 * 60 * 48).toISOString(), requester: 'Security Engineering', description: 'Deploying new OWASP Top 10 blocking rules to production WAF.' },
+  { id: 'CHG-30193', title: 'Sentinel Agent Deployment', status: 'pending-approval', risk: 'low', scheduledDate: new Date(Date.now() + 1000 * 60 * 60 * 72).toISOString(), requester: 'IT Ops', description: 'Rolling out Sentinel agent update to 500 endpoints in wave 2.' }
+];
+
+export const MOCK_ACTIVITY: any[] = [
+  { id: 'act-1', type: 'alert_triage', description: 'Sai Krishna started investigating ALT-2025-9102', timestamp: new Date(Date.now() - 1000 * 60 * 10).toISOString(), user: 'Sai Krishna' },
+  { id: 'act-2', type: 'ticket_close', description: 'INC-90422 closed by Automation', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(), user: 'System' },
+  { id: 'act-3', type: 'login', description: 'Suresh Reddy logged in', timestamp: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(), user: 'Suresh Reddy' }
+];
+
+export const ENTERPRISE_SYSTEMS: any[] = [
+  { id: 'sys-1', name: 'Core Banking', status: 'operational', uptime: '99.99%', lastIncident: '34 days ago' },
+  { id: 'sys-2', name: 'iBanking Web', status: 'operational', uptime: '99.95%', lastIncident: '12 days ago' },
+  { id: 'sys-3', name: 'UPI Gateway', status: 'degraded', uptime: '99.90%', lastIncident: '2 hours ago' }
+];
 
 export const ONBOARDING_STEPS: any[] = [
   { id: 1, title: 'Welcome' }, { id: 2, title: 'Team' }
