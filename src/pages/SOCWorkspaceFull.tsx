@@ -20,22 +20,18 @@ import { AuditLogPage } from './AuditLogPage';
 import { BlueTeamLabs } from './BlueTeamLabs';
 import { SOCCheatSheets } from './SOCCheatSheets';
 import { FrameworksPage } from './FrameworksPage';
-import { EthicalHackingWorkspaceFull } from './EthicalHackingWorkspaceFull';
+import { EthicalHackingWorkspace } from './EthicalHackingWorkspace';
+import { SOCShiftManagement } from './SOCShiftManagement';
+import { SOCReports } from './SOCReports';
+import { DetectionEngineeringPage } from './DetectionEngineeringPage';
+import { EmailSecurityPage } from './EmailSecurityPage';
+import { AssetInventoryPage } from './AssetInventoryPage';
+import { SOCKnowledgeBase } from './SOCKnowledgeBase';
+import { SOCRunbooks } from './SOCRunbooks';
+import { SOCTraining } from './SOCTraining';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { BookOpen, FileText, Clock, Radio, Users, BarChart3, Server, Shield } from 'lucide-react';
-
-function PlaceholderPage({ title, icon: Icon }: { title: string; icon: React.ElementType }) {
-  return (
-    <div>
-      <PageHeader icon={<Icon className="w-5 h-5 text-[var(--color-gfs-accent)]" />} title={title} />
-      <Card delay={0} className="!p-8 text-center">
-        <Icon className="w-8 h-8 text-[var(--color-gfs-text-muted)] mx-auto mb-3 opacity-30" />
-        <p className="text-[11px] text-[var(--color-gfs-text-muted)]">{title} — integrated from SOC workspace</p>
-      </Card>
-    </div>
-  );
-}
 
 export function SOCWorkspaceFull() {
   const [activeSection, setActiveSection] = useState('soc-console');
@@ -46,26 +42,27 @@ export function SOCWorkspaceFull() {
       case 'alert-queue': return <AlertQueuePage />;
       case 'investigations': return <InvestigationWorkspace />;
       case 'cases': return <InvestigationWorkspace />;
-      case 'shift': return <PlaceholderPage title="My Shift" icon={Clock} />;
+      case 'shift': return <SOCShiftManagement />;
       case 'internal-mail': return <InternalMessaging />;
-      case 'reports': return <PlaceholderPage title="Reports" icon={BarChart3} />;
+      case 'reports': return <SOCReports />;
       case 'soar': return <SOARCenter />;
       case 'siem': return <SIEMWorkspace />;
       case 'edr': return <EDRConsole />;
       case 'threat-intel': return <ThreatIntelPage />;
       case 'threat-hunting': return <ThreatHuntingPage />;
-      case 'detection-eng': return <PlaceholderPage title="Detection Engineering" icon={Radio} />;
+      case 'detection-eng': return <DetectionEngineeringPage />;
       case 'firewall-mgmt': return <FirewallManagement />;
-      case 'email-sec': return <PlaceholderPage title="Email Security" icon={Shield} />;
+      case 'email-sec': return <EmailSecurityPage />;
       case 'ad-sec': return <ActiveDirectoryPage />;
       case 'cloud-sec': return <CloudSecurity />;
       case 'vuln-mgmt': return <VulnerabilityDashboard />;
-      case 'asset-inv': return <PlaceholderPage title="Asset Inventory" icon={Server} />;
-      case 'knowledge': return <PlaceholderPage title="Knowledge Base" icon={BookOpen} />;
-      case 'runbooks': return <PlaceholderPage title="Runbooks" icon={FileText} />;
+      case 'asset-inv': return <AssetInventoryPage />;
+      case 'knowledge': return <SOCKnowledgeBase />;
+      case 'runbooks': return <SOCRunbooks />;
       case 'soc-labs': return <BlueTeamLabs />;
-      case 'training': return <PlaceholderPage title="Training" icon={BookOpen} />;
+      case 'training': return <SOCTraining />;
       case 'cheat-sheets': return <SOCCheatSheets />;
+      case 'audit': return <AuditLogPage />;
       default: return <SOCOperations />;
     }
   };
