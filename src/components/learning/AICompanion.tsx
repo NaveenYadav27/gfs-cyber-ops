@@ -27,10 +27,10 @@ export function AICompanion() {
     setInput('');
 
     setTimeout(() => {
-      const contextStr = currentMissionId ? \`mission \${currentMissionId}\` : 'the global platform';
+      const contextStr = currentMissionId ? `mission ${currentMissionId}` : 'the global platform';
       addAIConversation({ 
         role: 'mentor', 
-        content: \`Analyzing "\${message}" within the context of \${contextStr}...\n\nBased on your current telemetry, no immediate anomalies are flagged. I am standing by to assist with specific log queries or threat intel analysis as required.\`
+        content: `Analyzing "${message}" within the context of ${contextStr}...\n\nBased on your current telemetry, no immediate anomalies are flagged. I am standing by to assist with specific log queries or threat intel analysis as required.`
       });
     }, 600);
   };
@@ -89,17 +89,17 @@ export function AICompanion() {
               )}
               {aiConversations.map((msg, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}
-                  className={\`flex gap-2 \${msg.role === 'user' ? 'justify-end' : 'justify-start'}\`}>
+                  className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'mentor' && (
                     <div className="w-6 h-6 rounded bg-[var(--color-gfs-accent-dim)] flex items-center justify-center flex-shrink-0">
                       <Bot className="w-3 h-3 text-[var(--color-gfs-accent)]" />
                     </div>
                   )}
-                  <div className={\`max-w-[80%] p-3 rounded-xl text-[11px] leading-relaxed \${
+                  <div className={`max-w-[80%] p-3 rounded-xl text-[11px] leading-relaxed ${
                     msg.role === 'user'
                       ? 'bg-[var(--color-gfs-accent-dim)] text-[var(--color-gfs-text)]'
                       : 'bg-[var(--color-gfs-elevated)] text-[var(--color-gfs-text-secondary)]'
-                  }\`}>
+                  }`}>
                     <div className="whitespace-pre-wrap">{msg.content}</div>
                   </div>
                 </motion.div>
