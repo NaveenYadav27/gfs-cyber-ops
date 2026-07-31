@@ -62,7 +62,7 @@ const NetworkTopology: React.FC = () => {
         {NETWORK_KPIS.map((kpi, i) => (
           <Card key={kpi.label} delay={i * 0.05} className="!p-4 bg-gray-900 border-gray-800">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: \`\${kpi.color}15\` }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: kpi.color + '15' }}>
                 <kpi.icon className="w-4 h-4" style={{ color: kpi.color }} />
               </div>
               <span className="text-xs font-medium text-gray-400">{kpi.label}</span>
@@ -106,7 +106,7 @@ const NetworkTopology: React.FC = () => {
                     <tr key={i} className="hover:bg-gray-800/30 transition-colors">
                       <td className="px-4 py-3 font-medium text-gray-200">{node.name}</td>
                       <td className="px-4 py-3">
-                        <span className={\`px-2 py-1 rounded text-[10px] font-bold \${node.status === 'Operational' ? 'bg-green-900/30 text-green-400' : 'bg-yellow-900/30 text-yellow-400'}\`}>
+                        <span className={`px-2 py-1 rounded text-[10px] font-bold ${node.status === 'Operational' ? 'bg-green-900/30 text-green-400' : 'bg-yellow-900/30 text-yellow-400'}`}>
                           {node.status}
                         </span>
                       </td>
