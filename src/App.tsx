@@ -55,6 +55,7 @@ const Notebook = lazy(() => import('@/pages/Notebook').then((m) => ({ default: m
 const LearningAnalytics = lazy(() => import('@/pages/LearningAnalytics').then((m) => ({ default: m.LearningAnalytics })));
 const CareerProgression = lazy(() => import('@/pages/CareerProgression').then((m) => ({ default: m.CareerProgression })));
 const ModulePage = lazy(() => import('@/pages/ModulePage').then((m) => ({ default: m.ModulePage })));
+const OperationalWorkspace = lazy(() => import('@/pages/OperationalWorkspace').then((m) => ({ default: m.OperationalWorkspace })));
 
 const PAGE_MAP: Record<string, React.LazyExoticComponent<React.FC>> = {
   dashboard: EnterpriseDashboard,
@@ -75,6 +76,14 @@ const PAGE_MAP: Record<string, React.LazyExoticComponent<React.FC>> = {
   career: CareerJourney, career_center: CareerCenter, skills: CareerProgression, certs: CareerCenter,
   profile: MyProfile, equipment: MyEquipment, settings: MyProfile,
   missions: MissionDashboard, 'mission-active': MissionCanvas, notebook: Notebook, analytics: LearningAnalytics,
+  // DYNAMIC ENTERPRISE ROUTES
+  'itsm-dashboard': OperationalWorkspace, 'itsm-incidents': OperationalWorkspace, 'itsm-requests': OperationalWorkspace, 'itsm-problems': OperationalWorkspace, 'itsm-change': OperationalWorkspace, 'itsm-cmdb': OperationalWorkspace,
+  'noc-dashboard': OperationalWorkspace, 'noc-network': OperationalWorkspace, 'noc-servers': OperationalWorkspace, 'noc-cloud': OperationalWorkspace,
+  'soc-dashboard': OperationalWorkspace, 'soc-alerts': OperationalWorkspace, 'soc-cases': OperationalWorkspace, 'soc-hunting': OperationalWorkspace, 'soc-siem': OperationalWorkspace,
+  'grc-dashboard': OperationalWorkspace, 'grc-risk': OperationalWorkspace, 'grc-compliance': OperationalWorkspace, 'grc-audit': OperationalWorkspace,
+  'off-dashboard': OperationalWorkspace, 'off-engagements': OperationalWorkspace,
+  'purple-dashboard': OperationalWorkspace, 'purple-sim': OperationalWorkspace,
+  'exec-dashboard': OperationalWorkspace, 'exec-risk': OperationalWorkspace,
 };
 
 function LoadingFallback() {
