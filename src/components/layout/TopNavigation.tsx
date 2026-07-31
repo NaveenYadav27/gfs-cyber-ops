@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Building2, Users, Layers, Shield, Eye, Brain, Cloud, Key,
   Monitor, Database, Scale, FileText, BookOpen, Trophy, Settings, ChevronDown,
   Globe, Server, Zap, Radar, Crosshair, Target, Blend, ShieldAlert, Building,
-  MapPin, Briefcase,
+  MapPin, Briefcase, Activity
 } from 'lucide-react';
 import { useEnterprise } from '@/store/useEnterprise';
 import { useStore } from '@/store/useStore';

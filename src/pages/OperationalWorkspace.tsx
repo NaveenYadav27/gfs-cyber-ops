@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Card } from '@/components/ui/Card';
-import { SERVERS, INCIDENTS, ALERTS, DEPARTMENTS, EMPLOYEES, APPLICATIONS, GRAPH } from '@/data/enterprise';
-import { Globe, Shield, AlertTriangle, Scale, Monitor, Search as SearchIcon, Filter, Activity, Server, Users, BrainCircuit } from 'lucide-react';
+import { SERVERS, INCIDENTS, ALERTS, DEPARTMENTS, EMPLOYEES, APPLICATIONS, GRAPH } from '@/data/enterprise/index';
+import { Globe, Shield, AlertTriangle, Scale, Monitor, Search as SearchIcon, Filter, Activity, Server, Users, BrainCircuit, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/Badge';
 
@@ -27,7 +27,7 @@ export function OperationalWorkspace() {
       case 'grc-risk': return { title: 'Risk Assessment', subtitle: 'Threat Landscape', icon: AlertTriangle, data: Object.values(ALERTS) };
       // EXEC
       case 'exec-dashboard': return { title: 'Executive Operations', subtitle: 'Enterprise Health', icon: Globe, data: Object.values(DEPARTMENTS) };
-      default: return { title: \`Workspace: \${currentPage}\`, subtitle: 'Enterprise Data Engine', icon: Globe, data: [] };
+      default: return { title: `Workspace: ${currentPage}`, subtitle: 'Enterprise Data Engine', icon: Globe, data: [] };
     }
   };
 
@@ -91,12 +91,12 @@ export function OperationalWorkspace() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.03 }}
                     onClick={() => setSelectedEntity(item)}
-                    className={\`border-b border-[var(--color-gfs-border-light)] hover:bg-[var(--color-gfs-hover)] cursor-pointer \${selectedEntity?.id === item.id ? 'bg-[var(--color-gfs-accent)]/5' : ''}\`}
+                    className={`border-b border-[var(--color-gfs-border-light)] hover:bg-[var(--color-gfs-hover)] cursor-pointer ${selectedEntity?.id === item.id ? 'bg-[var(--color-gfs-accent)]/5' : ''}`}
                   >
                     <td className="p-3 font-mono text-[var(--color-gfs-accent)]">{item.id}</td>
                     <td className="p-3 font-medium text-[var(--color-gfs-text)]">{item.title || item.name || item.hostname || item.description}</td>
                     <td className="p-3">
-                      <Badge variant={item.status === 'active' || item.severity === 'critical' ? 'destructive' : 'default'}>
+                      <Badge variant={item.status === 'active' || item.severity === 'critical' ? 'critical' : 'default'}>
                         {item.status || item.severity || item.type || 'Operational'}
                       </Badge>
                     </td>
