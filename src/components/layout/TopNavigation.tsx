@@ -98,7 +98,7 @@ export function TopNavigation() {
   return (
     <div className="relative">
       {/* Nav bar */}
-      <div className="h-9 border-b border-[var(--color-gfs-border-light)] bg-[var(--color-gfs-deep)] flex items-center px-2 overflow-x-auto">
+      <div className="h-9 border-b border-[var(--color-gfs-border-light)] bg-[var(--color-gfs-deep)] flex items-center px-2 overflow-visible">
         {NAV_GROUPS.map((group) => (
           <div key={group.id} className="relative"
             onMouseEnter={() => setActiveGroup(group.id)}

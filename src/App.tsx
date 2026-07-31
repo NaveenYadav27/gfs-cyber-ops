@@ -94,6 +94,13 @@ function PageRouter() {
   const effectivePage = currentMissionId ? 'mission-active' : currentPage;
   const PageComponent = PAGE_MAP[effectivePage];
 
+  useEffect(() => {
+    const scrollContainer = document.getElementById('main-scroll-container');
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, [effectivePage]);
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <AnimatePresence mode="wait">

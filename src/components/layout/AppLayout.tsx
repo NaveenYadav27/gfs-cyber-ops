@@ -22,7 +22,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         <Sidebar />
 
         {/* Main Workspace */}
-        <main className="flex-1 overflow-y-auto" style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+        <main id="main-scroll-container" className="flex-1 overflow-y-auto" style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}>
           <div className="p-4 max-w-[1800px]">
             {children}
           </div>
