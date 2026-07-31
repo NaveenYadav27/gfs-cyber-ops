@@ -95,6 +95,28 @@ function LoadingFallback() {
   );
 }
 
+class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: Error | null}> {
+  constructor(props: {children: React.ReactNode}) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 bg-red-950 border border-red-500 rounded-lg text-white m-8">
+          <h2 className="text-xl font-bold mb-4">Something went wrong loading this workspace</h2>
+          <pre className="text-sm bg-black p-4 rounded overflow-auto">{this.state.error?.toString()}</pre>
+          <pre className="text-sm bg-black p-4 rounded overflow-auto mt-2">{this.state.error?.stack}</pre>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function PageRouter() {
   const { currentPage } = useStore();
   const { currentMissionId } = useLearningEngine();
@@ -102,17 +124,19 @@ function PageRouter() {
   const PageComponent = PAGE_MAP[effectivePage];
 
   return (
-    <Suspense fallback={<LoadingFallback />}>
+    <ErrorBoundary>
       <AnimatePresence mode="wait">
         <motion.div key={effectivePage}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.15 }}>
-          {PageComponent ? <PageComponent /> : <LoadingFallback />}
+          <Suspense fallback={<LoadingFallback />}>
+            {PageComponent ? <PageComponent /> : <LoadingFallback />}
+          </Suspense>
         </motion.div>
       </AnimatePresence>
-    </Suspense>
+    </ErrorBoundary>
   );
 }
 
