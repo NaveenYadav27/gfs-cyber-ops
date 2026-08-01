@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Clock, Users, Calendar, AlertTriangle, ArrowRight, Coffee, Shield } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/layout/PageHeader';
+import EmployeeDigitalTwin from '@/components/enterprise/EmployeeDigitalTwin';
 
 const TEAM_MEMBERS = [
   { id: 'emp-020', name: 'Suresh Reddy', role: 'SOC Manager', shift: 'morning', status: 'active', alerts: 0, cases: 2, avatar: 'SR' },
@@ -13,6 +15,8 @@ const TEAM_MEMBERS = [
 ];
 
 export function SOCShiftManagement() {
+  const [selectedAnalyst, setSelectedAnalyst] = useState<any | null>(null);
+
   return (
     <div className="space-y-4">
       <PageHeader 
@@ -43,7 +47,13 @@ export function SOCShiftManagement() {
         <h2 className="text-lg font-bold text-[var(--color-gfs-text)] border-b border-[var(--color-gfs-border-light)] pb-2">Shift Roster</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {TEAM_MEMBERS.map((member, idx) => (
-            <Card key={member.id} delay={0.1 * idx} hover className="!p-4 border-l-2 border-l-[var(--color-gfs-accent)]">
+            <Card 
+              key={member.id} 
+              delay={0.1 * idx} 
+              hover 
+              className="!p-4 border-l-2 border-l-[var(--color-gfs-accent)] cursor-pointer hover:border-[var(--color-gfs-accent)]"
+              onClick={() => setSelectedAnalyst(member)}
+            >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[var(--color-gfs-surface)] flex items-center justify-center text-sm font-bold text-[var(--color-gfs-accent)] border border-[var(--color-gfs-accent)]/20">
                   {member.avatar}
@@ -70,6 +80,14 @@ export function SOCShiftManagement() {
           ))}
         </div>
       </div>
+      <AnimatePresence>
+        {selectedAnalyst && (
+          <EmployeeDigitalTwin 
+            employee={selectedAnalyst} 
+            onClose={() => setSelectedAnalyst(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
