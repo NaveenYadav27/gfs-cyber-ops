@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card } from '@/components/ui/Card';
 
 // --- Types ---
 export interface Employee {
@@ -33,10 +33,10 @@ const OverviewTab = () => (
   <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
     <div className="grid grid-cols-2 gap-4">
       <Card className="bg-slate-900 border-slate-800">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-slate-400 font-medium">MTTA (Mean Time to Acknowledge)</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <div className="pb-2">
+          <h3 className="text-sm text-slate-400 font-medium">MTTA (Mean Time to Acknowledge)</h3>
+        </div>
+        <div>
           <div className="flex items-end gap-2">
             <span className="text-3xl font-bold text-white">4.2m</span>
             <span className="text-sm text-emerald-400 flex items-center mb-1"><TrendingUp className="w-3 h-3 mr-1" /> 12%</span>
@@ -44,13 +44,13 @@ const OverviewTab = () => (
           <div className="w-full bg-slate-800 h-1.5 mt-4 rounded-full overflow-hidden">
             <div className="bg-emerald-500 h-full w-[85%]"></div>
           </div>
-        </CardContent>
+        </div>
       </Card>
       <Card className="bg-slate-900 border-slate-800">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-slate-400 font-medium">MTTR (Mean Time to Resolve)</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <div className="pb-2">
+          <h3 className="text-sm text-slate-400 font-medium">MTTR (Mean Time to Resolve)</h3>
+        </div>
+        <div>
           <div className="flex items-end gap-2">
             <span className="text-3xl font-bold text-white">18.5m</span>
             <span className="text-sm text-emerald-400 flex items-center mb-1"><TrendingUp className="w-3 h-3 mr-1" /> 5%</span>
@@ -58,15 +58,15 @@ const OverviewTab = () => (
           <div className="w-full bg-slate-800 h-1.5 mt-4 rounded-full overflow-hidden">
             <div className="bg-blue-500 h-full w-[70%]"></div>
           </div>
-        </CardContent>
+        </div>
       </Card>
     </div>
 
     <Card className="bg-slate-900 border-slate-800">
-      <CardHeader>
-        <CardTitle className="text-md text-white">Current Focus</CardTitle>
-      </CardHeader>
-      <CardContent>
+      <div>
+        <h3 className="text-md text-white">Current Focus</h3>
+      </div>
+      <div>
         <div className="flex items-start space-x-4 border-l-2 border-orange-500 pl-4 py-2">
           <ShieldAlert className="w-5 h-5 text-orange-500 mt-0.5" />
           <div>
@@ -78,7 +78,7 @@ const OverviewTab = () => (
             </div>
           </div>
         </div>
-      </CardContent>
+      </div>
     </Card>
 
     <div className="grid grid-cols-2 gap-4">
@@ -105,12 +105,12 @@ const OverviewTab = () => (
 const LiveOperationsTab = () => (
   <div className="space-y-6">
     <Card className="bg-slate-900 border-slate-800">
-      <CardHeader>
-        <CardTitle className="text-md text-white flex items-center gap-2">
+      <div>
+        <h3 className="text-md text-white flex items-center gap-2">
           <Activity className="w-4 h-4 text-blue-400" /> Activity Telemetry
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+        </h3>
+      </div>
+      <div>
         <div className="space-y-4">
           <div className="flex justify-between items-center text-sm">
             <span className="text-slate-400">Keyboard Activity (Last 5m)</span>
@@ -124,7 +124,7 @@ const LiveOperationsTab = () => (
             <span className="text-white font-medium">Microsoft Sentinel - Logs</span>
           </div>
         </div>
-      </CardContent>
+      </div>
     </Card>
 
     <h4 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Action Log</h4>
