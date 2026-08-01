@@ -24,6 +24,14 @@ export function SOCShiftManagement() {
         title="SOC Shift Management" 
         subtitle="Current Shift Operations & Analyst Workload" 
       />
+
+      <button 
+        onClick={() => setSelectedAnalyst(TEAM_MEMBERS[0])}
+        className="w-full py-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-2xl rounded-xl shadow-lg border-2 border-emerald-400 mb-4 animate-pulse"
+      >
+        [DEBUG] CLICK HERE TO LAUNCH DIGITAL TWIN
+      </button>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card delay={0.1} className="!p-4">
           <h3 className="text-sm font-semibold text-[var(--color-gfs-text)] mb-2">Active Shift</h3>
