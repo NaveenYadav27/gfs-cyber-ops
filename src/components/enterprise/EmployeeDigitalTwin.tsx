@@ -7,7 +7,7 @@ import {
   MapPin, Mail, ChevronRight, CheckCircle2, Zap
 } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
 
 // --- Types ---
