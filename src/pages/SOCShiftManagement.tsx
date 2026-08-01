@@ -7,11 +7,11 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import EmployeeDigitalTwin from '@/components/enterprise/EmployeeDigitalTwin';
 
 const TEAM_MEMBERS = [
-  { id: 'emp-020', name: 'Suresh Reddy', role: 'SOC Manager', shift: 'morning', status: 'active', alerts: 0, cases: 2, avatar: 'SR' },
-  { id: 'emp-021', name: 'Arjun Sharma', role: 'T2 Analyst', shift: 'morning', status: 'active', alerts: 2, cases: 1, avatar: 'AS' },
-  { id: 'emp-022', name: 'Priya Nair', role: 'T1 Analyst', shift: 'morning', status: 'break', alerts: 1, cases: 0, avatar: 'PN' },
-  { id: 'emp-023', name: 'Raghav Sharma', role: 'T2 Analyst', shift: 'morning', status: 'active', alerts: 1, cases: 1, avatar: 'RS' },
-  { id: 'emp-025', name: 'Harsha Vardhan', role: 'T3 Analyst', shift: 'morning', status: 'active', alerts: 1, cases: 1, avatar: 'HV' },
+  { id: 'emp-020', name: 'Suresh Reddy', role: 'SOC Manager', department: 'Cyber Defense', manager: 'Sarah Jenkins', location: 'Hyderabad, IND', email: 's.reddy@gfs.com', shift: 'morning', status: 'active', alerts: 0, cases: 2, avatar: 'SR' },
+  { id: 'emp-021', name: 'Arjun Sharma', role: 'T2 Analyst', department: 'Cyber Defense', manager: 'Suresh Reddy', location: 'Bengaluru, IND', email: 'a.sharma@gfs.com', shift: 'morning', status: 'active', alerts: 2, cases: 1, avatar: 'AS' },
+  { id: 'emp-022', name: 'Priya Nair', role: 'T1 Analyst', department: 'Cyber Defense', manager: 'Arjun Sharma', location: 'Bengaluru, IND', email: 'p.nair@gfs.com', shift: 'morning', status: 'break', alerts: 1, cases: 0, avatar: 'PN' },
+  { id: 'emp-023', name: 'Raghav Sharma', role: 'T2 Analyst', department: 'Cyber Defense', manager: 'Suresh Reddy', location: 'Hyderabad, IND', email: 'r.sharma@gfs.com', shift: 'morning', status: 'active', alerts: 1, cases: 1, avatar: 'RS' },
+  { id: 'emp-025', name: 'Harsha Vardhan', role: 'T3 Analyst', department: 'Cyber Defense', manager: 'Sarah Jenkins', location: 'Bengaluru, IND', email: 'h.vardhan@gfs.com', shift: 'morning', status: 'active', alerts: 1, cases: 1, avatar: 'HV' },
 ];
 
 export function SOCShiftManagement() {
@@ -80,14 +80,14 @@ export function SOCShiftManagement() {
           ))}
         </div>
       </div>
-      <AnimatePresence>
+      <>
         {selectedAnalyst && (
           <EmployeeDigitalTwin 
             employee={selectedAnalyst} 
             onClose={() => setSelectedAnalyst(null)} 
           />
         )}
-      </AnimatePresence>
+      </>
     </div>
   );
 }
