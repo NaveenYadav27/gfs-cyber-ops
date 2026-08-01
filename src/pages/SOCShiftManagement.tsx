@@ -82,6 +82,15 @@ export function SOCShiftManagement() {
       </div>
       <>
         {selectedAnalyst && (
+          <div 
+            className="fixed inset-0 z-[9999] bg-red-500 flex flex-col items-center justify-center cursor-pointer"
+            onClick={() => setSelectedAnalyst(null)}
+          >
+            <h1 className="text-white text-6xl font-bold">CLICK WORKED!</h1>
+            <p className="text-white text-2xl mt-4">If you see this, the click event fired.</p>
+          </div>
+        )}
+        {selectedAnalyst && (
           <EmployeeDigitalTwin 
             employee={selectedAnalyst} 
             onClose={() => setSelectedAnalyst(null)} 
