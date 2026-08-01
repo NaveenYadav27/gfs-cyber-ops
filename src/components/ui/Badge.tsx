@@ -21,7 +21,7 @@ export function Badge({ children, variant = 'default', className, pulse }: Badge
 
   return (
     <span className={clsx(
-      'inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold border leading-tight',
+      'inline-flex items-center px-[8px] py-[2px] rounded-sm text-[11px] font-semibold border leading-tight',
       styles[variant],
       pulse && 'animate-pulse',
       className

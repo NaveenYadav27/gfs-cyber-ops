@@ -103,14 +103,14 @@ export function TopNavigation() {
           <div key={group.id} className="relative"
             onMouseEnter={() => setActiveGroup(group.id)}
             onMouseLeave={() => setActiveGroup(null)}>
-            <button className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] font-medium transition-colors whitespace-nowrap ${
+            <button className={`flex items-center gap-[8px] px-[12px] h-[36px] rounded-md text-[13px] font-medium transition-colors whitespace-nowrap ${
               activeGroup === group.id
                 ? 'text-[var(--color-gfs-accent)] bg-[var(--color-gfs-accent-dim)]'
                 : 'text-[var(--color-gfs-text-secondary)] hover:text-[var(--color-gfs-text)] hover:bg-[var(--color-gfs-hover)]'
             }`}>
-              <group.icon className="w-3.5 h-3.5" />
+              <group.icon className="w-[18px] h-[18px]" />
               {group.label}
-              <ChevronDown className={`w-3 h-3 transition-transform ${activeGroup === group.id ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-[14px] h-[14px] transition-transform ${activeGroup === group.id ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Dropdown */}

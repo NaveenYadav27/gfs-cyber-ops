@@ -124,7 +124,7 @@ export function Sidebar() {
                     setCurrentPage(item.id);
                   }}
                   className={clsx(
-                    'w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[11px] transition-all duration-100 group relative',
+                    'w-full flex items-center gap-[12px] px-[12px] h-[36px] rounded-md text-[13px] transition-all duration-100 group relative',
                     active
                       ? 'bg-[var(--color-gfs-accent-dim)] text-[var(--color-gfs-accent)]'
                       : 'text-[var(--color-gfs-text-secondary)] hover:text-[var(--color-gfs-text)] hover:bg-[var(--color-gfs-hover)]',
@@ -137,7 +137,7 @@ export function Sidebar() {
                       className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-4 rounded-r-full bg-[var(--color-gfs-accent)]"
                       transition={{ type: 'spring', stiffness: 500, damping: 35 }} />
                   )}
-                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  <Icon className="w-[18px] h-[18px] flex-shrink-0" />
                   {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
                 </button>
               );
