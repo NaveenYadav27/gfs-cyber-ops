@@ -25,13 +25,6 @@ export function SOCShiftManagement() {
         subtitle="Current Shift Operations & Analyst Workload" 
       />
 
-      <button 
-        onClick={() => setSelectedAnalyst(TEAM_MEMBERS[0])}
-        className="w-full py-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-2xl rounded-xl shadow-lg border-2 border-emerald-400 mb-4 animate-pulse"
-      >
-        [DEBUG] CLICK HERE TO LAUNCH DIGITAL TWIN
-      </button>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card delay={0.1} className="!p-4">
           <h3 className="text-sm font-semibold text-[var(--color-gfs-text)] mb-2">Active Shift</h3>
@@ -89,15 +82,6 @@ export function SOCShiftManagement() {
         </div>
       </div>
       <>
-        {selectedAnalyst && (
-          <div 
-            className="fixed inset-0 z-[9999] bg-red-500 flex flex-col items-center justify-center cursor-pointer"
-            onClick={() => setSelectedAnalyst(null)}
-          >
-            <h1 className="text-white text-6xl font-bold">CLICK WORKED!</h1>
-            <p className="text-white text-2xl mt-4">If you see this, the click event fired.</p>
-          </div>
-        )}
         {selectedAnalyst && (
           <EmployeeDigitalTwin 
             employee={selectedAnalyst} 
