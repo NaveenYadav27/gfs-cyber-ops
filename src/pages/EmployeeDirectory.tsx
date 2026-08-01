@@ -4,11 +4,9 @@ import { Users, Search, MapPin, Shield, Briefcase, Mail, Phone, Laptop, Key, Clo
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { InspectorPanel } from '@/components/ui/InspectorPanel';
-import { LEADERSHIP, SOC_TEAM } from '@/data/enterprise';
+import EmployeeDigitalTwin from '@/components/enterprise/EmployeeDigitalTwin';
+import { useEnterprise } from '@/store/useEnterprise';
 import type { Employee } from '@/types/enterprise';
-
-const ALL_EMPLOYEES = [...LEADERSHIP, ...SOC_TEAM];
 
 const statusColor: Record<string, { dot: string; label: string; badge: 'success' | 'default' | 'medium' | 'critical' }> = {
   active: { dot: 'var(--color-gfs-green)', label: 'Online', badge: 'success' },
@@ -22,8 +20,9 @@ export function EmployeeDirectory() {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Employee | null>(null);
   const [filter, setFilter] = useState('all');
+  const { employees } = useEnterprise();
 
-  const filtered = ALL_EMPLOYEES.filter((e) => {
+  const filtered = employees.filter((e) => {
     if (search && !e.name.toLowerCase().includes(search.toLowerCase()) && !e.designation.toLowerCase().includes(search.toLowerCase()) && !e.department.toLowerCase().includes(search.toLowerCase())) return false;
     if (filter === 'leadership' && e.level > 3) return false;
     if (filter === 'soc' && !e.department.includes('SOC') && !e.department.includes('Threat')) return false;
@@ -36,7 +35,7 @@ export function EmployeeDirectory() {
       <PageHeader
         icon={<Users className="w-5 h-5 text-[var(--color-gfs-accent)]" />}
         title="Employee Directory"
-        subtitle={`${ALL_EMPLOYEES.length} employees across GFS — ${ALL_EMPLOYEES.filter((e) => e.status === 'active').length} currently online`}
+        subtitle={`${employees.length} employees across GFS — ${employees.filter((e) => e.status === 'active').length} currently online`}
       />
 
       <div className="flex items-center gap-3">
@@ -92,101 +91,9 @@ export function EmployeeDirectory() {
         })}
       </div>
 
-      {/* Inspector Panel */}
-      <InspectorPanel
-        open={!!selected}
-        onClose={() => setSelected(null)}
-        title={selected?.name || ''}
-        subtitle={selected?.designation}
-        icon={<Users className="w-4 h-4 text-[var(--color-gfs-accent)]" />}
-        badge={selected ? <Badge variant={statusColor[selected.status].badge}>{statusColor[selected.status].label}</Badge> : undefined}
-        tabs={[
-          { id: 'overview', label: 'Overview', icon: <Eye className="w-3 h-3" /> },
-          { id: 'assets', label: 'Assets', icon: <Laptop className="w-3 h-3" /> },
-          { id: 'security', label: 'Security', icon: <Shield className="w-3 h-3" /> },
-          { id: 'work', label: 'Work', icon: <Briefcase className="w-3 h-3" /> },
-        ]}
-        sections={[
-          { id: 'overview', title: 'Employee Details', content: selected && (
-            <div className="space-y-2">
-              <InfoRow label="Employee ID" value={selected.employeeId} />
-              <InfoRow label="Department" value={selected.department} />
-              <InfoRow label="Division" value={selected.division} />
-              <InfoRow label="Manager" value={selected.manager ? ALL_EMPLOYEES.find((e) => e.id === selected.manager)?.name || selected.manager : 'N/A'} />
-              <InfoRow label="Location" value={`${selected.location} — ${selected.floor}`} />
-              <InfoRow label="Seat" value={selected.seat} />
-              <InfoRow label="Shift" value={selected.shift} />
-              <InfoRow label="Joined" value={selected.joinedDate} />
-              <InfoRow label="Email" value={selected.email} />
-              <InfoRow label="Phone" value={selected.phone} />
-              <InfoRow label="Laptop" value={selected.laptop} />
-              <InfoRow label="Security Clearance" value={selected.securityClearance} />
-              <InfoRow label="Salary Band" value={selected.salaryBand} />
-              <p className="text-[10px] text-[var(--color-gfs-text-secondary)] mt-2 leading-relaxed">{selected.bio}</p>
-            </div>
-          )},
-          { id: 'assets', title: 'Assets & Systems', content: selected && (
-            <div className="space-y-2">
-              <div>
-                <span className="gfs-text-label text-[9px]">Owned Assets</span>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {selected.ownedAssets.length > 0 ? selected.ownedAssets.map((a) => <Badge key={a} variant="default">{a}</Badge>) : <span className="text-[10px] text-[var(--color-gfs-text-muted)]">None assigned</span>}
-                </div>
-              </div>
-              <div>
-                <span className="gfs-text-label text-[9px]">Assigned Systems</span>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {selected.assignedSystems.length > 0 ? selected.assignedSystems.map((s) => <Badge key={s} variant="accent">{s}</Badge>) : <span className="text-[10px] text-[var(--color-gfs-text-muted)]">None</span>}
-                </div>
-              </div>
-            </div>
-          )},
-          { id: 'security', title: 'Security Profile', content: selected && (
-            <div className="space-y-2">
-              <InfoRow label="Clearance" value={selected.securityClearance} />
-              <InfoRow label="VPN Session" value={selected.vpnSession ? 'Active' : 'None'} />
-              <InfoRow label="Last Login" value={selected.lastLogin} />
-              <div>
-                <span className="gfs-text-label text-[9px]">Skills</span>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {selected.skills.map((s) => <Badge key={s} variant="default">{s}</Badge>)}
-                </div>
-              </div>
-              <div>
-                <span className="gfs-text-label text-[9px]">Certifications</span>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {selected.certifications.length > 0 ? selected.certifications.map((c) => <Badge key={c} variant="success">{c}</Badge>) : <span className="text-[10px] text-[var(--color-gfs-text-muted)]">None</span>}
-                </div>
-              </div>
-            </div>
-          )},
-          { id: 'work', title: 'Current Work', content: selected && (
-            <div className="space-y-2">
-              <div>
-                <span className="gfs-text-label text-[9px]">Projects</span>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {selected.projects.length > 0 ? selected.projects.map((p) => <Badge key={p} variant="accent">{p}</Badge>) : <span className="text-[10px] text-[var(--color-gfs-text-muted)]">None</span>}
-                </div>
-              </div>
-              <div>
-                <span className="gfs-text-label text-[9px]">Active Incidents</span>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {selected.currentIncidents.length > 0 ? selected.currentIncidents.map((inc) => <Badge key={inc} variant="critical">{inc}</Badge>) : <span className="text-[10px] text-[var(--color-gfs-text-muted)]">None</span>}
-                </div>
-              </div>
-            </div>
-          )},
-        ]}
-      />
-    </div>
-  );
-}
-
-function InfoRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between text-[11px]">
-      <span className="text-[var(--color-gfs-text-muted)]">{label}</span>
-      <span className="text-[var(--color-gfs-text)]">{value}</span>
+      {selected && (
+        <EmployeeDigitalTwin employee={selected} onClose={() => setSelected(null)} />
+      )}
     </div>
   );
 }

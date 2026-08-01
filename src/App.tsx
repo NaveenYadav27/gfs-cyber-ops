@@ -61,7 +61,7 @@ const PAGE_MAP: Record<string, React.FC | React.LazyExoticComponent<React.FC>> =
   dashboard: EnterpriseDashboard,
   about_gfs: AboutGFS,
   'about-gfs': AboutGFS,
-  enterprise_timeline: AboutGFS,
+  'enterprise-timeline': AboutGFS,
   schedule: DailySchedule, news: EnterpriseNews, activity: ActivityFeed,
   soc: SOCWorkspaceFull, incidents: ServiceDesk, playbooks: PlaybooksPage, messaging: InternalMessaging,
   'threat-intel': ThreatIntelPage, vulnerabilities: VulnerabilityDashboard, firewall: FirewallManagement,
@@ -73,7 +73,7 @@ const PAGE_MAP: Record<string, React.FC | React.LazyExoticComponent<React.FC>> =
   'ethical-hacking': EthicalHackingWorkspaceFull, vapt: VAPTPage, 'purple-team': PurpleTeamPage,
   modules: ModulePage, 'org-chart': OrgChart, 'business-units': BusinessUnits,
   departments: DepartmentDashboards, 'office-tour': OfficeTour,
-  career: CareerJourney, career_center: CareerCenter, skills: CareerProgression, certs: CareerCenter,
+  career: CareerJourney, 'career-center': CareerCenter, skills: CareerProgression, certs: CareerCenter,
   profile: MyProfile, equipment: MyEquipment, settings: MyProfile,
   missions: MissionDashboard, 'mission-active': MissionCanvas, notebook: Notebook, analytics: LearningAnalytics,
 
@@ -181,7 +181,7 @@ import { Sidebar } from '@/components/layout/Sidebar';
 export default function App() {
   // Initialize enterprise simulation
   const { addEvent } = useEnterprise();
-  const { isAuthenticated } = useStore();
+  const { isAuthenticated, theme } = useStore();
 
   // Set authenticated on mount (bypass login)
   useEffect(() => {
@@ -199,7 +199,30 @@ export default function App() {
         } as any,
       });
     }
-  }, []);
+  }, [isAuthenticated]);
+
+  // Handle Theme Synchronization
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'system') {
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (systemDark) {
+        root.classList.remove('light');
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+        root.classList.add('light');
+      }
+    } else {
+      if (theme === 'light') {
+        root.classList.remove('dark');
+        root.classList.add('light');
+      } else {
+        root.classList.remove('light');
+        root.classList.add('dark');
+      }
+    }
+  }, [theme]);
 
   return <AppShell />;
 }

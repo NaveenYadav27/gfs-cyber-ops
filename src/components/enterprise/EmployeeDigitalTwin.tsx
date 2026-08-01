@@ -12,18 +12,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Tabs } from '@/components/ui/Tabs';
 
-// --- Types ---
-export interface Employee {
-  id: string;
-  name: string;
-  role: string;
-  department: string;
-  manager: string;
-  shift: string;
-  avatarUrl?: string;
-  email: string;
-  location: string;
-}
+import type { Employee } from '@/types/enterprise';
 
 interface EmployeeDigitalTwinProps {
   employee: Employee;
@@ -281,8 +270,8 @@ export default function EmployeeDigitalTwin({ employee, onClose }: EmployeeDigit
           <div className="flex justify-between items-start mb-[24px]">
             <div className="flex gap-[16px] items-center">
               <div className="relative">
-                {employee.avatarUrl ? (
-                  <img src={employee.avatarUrl} alt={employee.name} className="w-[64px] h-[64px] rounded-full border-2 border-[var(--color-gfs-border)] object-cover" />
+                {employee.photo ? (
+                  <img src={employee.photo} alt={employee.name} className="w-[64px] h-[64px] rounded-full border-2 border-[var(--color-gfs-border)] object-cover" />
                 ) : (
                   <div className="w-[64px] h-[64px] rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-xl font-bold text-white shadow-lg">
                     {employee.name.charAt(0)}
@@ -296,11 +285,11 @@ export default function EmployeeDigitalTwin({ employee, onClose }: EmployeeDigit
               <div>
                 <h2 className="gfs-text-h2 text-white">{employee.name}</h2>
                 <div className="flex items-center gap-[8px] gfs-text-body text-slate-400 mt-[4px]">
-                  <span className="font-medium text-slate-300">{employee.role}</span>
+                  <span className="font-medium text-slate-300">{employee.designation}</span>
                   <span>•</span>
                   <span>{employee.department}</span>
                   <span>•</span>
-                  <span>ID: {employee.id}</span>
+                  <span>ID: {employee.employeeId || employee.id}</span>
                 </div>
               </div>
             </div>

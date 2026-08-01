@@ -1,10 +1,11 @@
-// src/store/useEnterprise.ts
 import { create } from 'zustand';
-import type { EnterpriseEvent } from '@/types/enterprise';
+import type { EnterpriseEvent, Employee } from '@/types/enterprise';
 import { generateEnterpriseEvent } from '@/data/enterprise';
+import { enterpriseEmployees } from '@/data/enterpriseEmployees';
 
 interface EnterpriseState {
   events: EnterpriseEvent[];
+  employees: Employee[];
   selectedEvent: string | null;
   webinarMode: boolean;
   webinarStep: number;
@@ -22,6 +23,7 @@ interface EnterpriseState {
 
 export const useEnterprise = create<EnterpriseState>((set) => ({
   events: [],
+  employees: enterpriseEmployees,
   selectedEvent: null,
   webinarMode: false,
   webinarStep: 0,
