@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, User, Activity, TrendingUp, ShieldAlert, Laptop, BookOpen, 
   Briefcase, Users, GitMerge, Bot, Award, Book, ShieldCheck, 
@@ -267,11 +268,11 @@ export default function EmployeeDigitalTwin({ employee, onClose }: EmployeeDigit
     { name: 'Career Journey', icon: Award },
   ];
 
-  return (
+  return createPortal(
     <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[49] transition-opacity" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] transition-opacity" onClick={onClose} />
       
-      <div className="fixed top-0 right-0 h-screen w-[40%] min-w-[600px] bg-slate-950 border-l border-slate-800 shadow-2xl z-[50] flex flex-col text-slate-200 animate-in slide-in-from-right duration-300">
+      <div className="fixed top-0 right-0 h-screen w-[40%] min-w-[600px] bg-slate-950 border-l border-slate-800 shadow-2xl z-[9999] flex flex-col text-slate-200 animate-in slide-in-from-right duration-300">
         
         {/* Header */}
         <div className="p-6 border-b border-slate-800 bg-slate-900/50">
@@ -382,6 +383,7 @@ export default function EmployeeDigitalTwin({ employee, onClose }: EmployeeDigit
           background-color: #475569;
         }
       `}} />
-    </>
+    </>,
+    document.body
   );
 }
