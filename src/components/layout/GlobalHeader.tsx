@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Shield, AlertTriangle, Clock, Radio, Search, Settings, ChevronDown, LogOut, User,
-  Zap, Wifi, Sun, Moon,
+  Zap, Wifi, Sun, Moon, MapPin,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { EnterpriseSearch } from '@/components/ui/EnterpriseSearch';
 import { NotificationCenter } from '@/components/ui/NotificationCenter';
 import { useStore } from '@/store/useStore';
 import { useLearningEngine } from '@/store/useLearningEngine';
-import { WebinarMode } from '@/components/webinar/WebinarMode';
 
 export function GlobalHeader() {
   const { user, logout, theme, setTheme } = useStore();
@@ -49,9 +48,10 @@ export function GlobalHeader() {
         </div>
       )}
 
-      {/* Webinar Demo Button */}
-      <div className="hidden xl:block">
-        <WebinarMode />
+      {/* HQ Badge */}
+      <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--color-gfs-blue-dim)] border border-[var(--color-gfs-blue)]/20">
+        <MapPin className="w-3 h-3 text-[var(--color-gfs-blue)]" />
+        <span className="text-[10px] font-semibold text-[var(--color-gfs-blue)]">HQ: VIJAYAWADA, AMARAVATI</span>
       </div>
 
       {/* Search */}
